@@ -1,0 +1,2906 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amr · مركز الشردات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root, [data-theme="dark"] {
+    --bg0: #06080d;
+    --bg1: #0b0f17;
+    --panel: rgba(18, 24, 36, 0.92);
+    --panel-solid: #121826;
+    --panel2: #1a2233;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --text: #f2f5fb;
+    --muted: #93a0b8;
+    --accent: #5ee4a2;
+    --accent-dim: rgba(94, 228, 162, 0.14);
+    --accent2: #6b9dff;
+    --gold: #f0c14a;
+    --green: #5ee4a2;
+    --green-dim: rgba(94, 228, 162, 0.12);
+    --red: #ff7b84;
+    --orange: #f0c14a;
+    --blue: #6b9dff;
+    --purple: #b794f6;
+    --shadow: 0 12px 40px rgba(0,0,0,0.45);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --nav: rgba(8, 11, 18, 0.82);
+    --sidebar-w: 240px;
+  }
+  [data-theme="aurora"] {
+    --bg0: #080612;
+    --bg1: #0e0a18;
+    --panel: rgba(22, 16, 34, 0.94);
+    --panel-solid: #160f22;
+    --panel2: #1f1730;
+    --border: rgba(180, 140, 255, 0.12);
+    --border-strong: rgba(180, 140, 255, 0.22);
+    --text: #f6f1ff;
+    --muted: #a99bc4;
+    --accent: #f0c14a;
+    --accent-dim: rgba(240, 193, 74, 0.14);
+    --accent2: #a78bfa;
+    --gold: #f0c14a;
+    --green: #5ee4a2;
+    --green-dim: rgba(94, 228, 162, 0.12);
+    --red: #ff7b84;
+    --orange: #f0c14a;
+    --blue: #a78bfa;
+    --purple: #c4b5fd;
+    --shadow: 0 16px 50px rgba(0,0,0,0.5);
+    --nav: rgba(10, 6, 18, 0.88);
+  }
+  [data-theme="light"] {
+    --bg0: #eef1f7;
+    --bg1: #f7f8fc;
+    --panel: rgba(255,255,255,0.95);
+    --panel-solid: #ffffff;
+    --panel2: #eef2f8;
+    --border: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(15, 23, 42, 0.14);
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #0f9f6e;
+    --accent-dim: rgba(15, 159, 110, 0.12);
+    --accent2: #3b82f6;
+    --gold: #d97706;
+    --green: #0f9f6e;
+    --green-dim: rgba(15, 159, 110, 0.1);
+    --red: #e11d48;
+    --orange: #d97706;
+    --blue: #3b82f6;
+    --purple: #7c3aed;
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --nav: rgba(255,255,255,0.9);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+    background: var(--bg0);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: -1;
+    background:
+      radial-gradient(900px 500px at 15% -10%, color-mix(in srgb, var(--accent2) 22%, transparent), transparent 55%),
+      radial-gradient(800px 480px at 90% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 50%),
+      linear-gradient(180deg, var(--bg1), var(--bg0));
+  }
+
+  /* ——— Gate / Home ——— */
+  .gate, .home-screen {
+    min-height: 100vh; display: none; align-items: center; justify-content: center;
+    padding: 28px 16px;
+  }
+  #gateScreen.show, #homeScreen.show { display: flex; }
+  .gate-card {
+    width: min(420px, 100%);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px 28px;
+    box-shadow: var(--shadow);
+    /* no heavy blur */
+  }
+  .gate-card h1 {
+    font-size: 1.75rem; font-weight: 700; text-align: center;
+    letter-spacing: -0.02em; margin-bottom: 8px;
+  }
+  .gate-card p.sub {
+    color: var(--muted); text-align: center; font-size: 0.9rem; margin-bottom: 22px; line-height: 1.6;
+  }
+  .gate-card label {
+    display: block; font-size: 0.72rem; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin: 12px 0 6px;
+  }
+  .gate-card input {
+    width: 100%; background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text); padding: 12px 14px; font-size: 0.95rem;
+    font-family: inherit; transition: border-color .15s, box-shadow .15s;
+  }
+  .gate-card input:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+  .gate-card .btn-primary {
+    width: 100%; margin-top: 20px; padding: 13px; font-size: 0.95rem;
+    border-radius: 12px; font-weight: 700;
+  }
+
+  .home-wrap { width: min(980px, 100%); }
+  .home-hero {
+    text-align: center; margin-bottom: 28px; padding: 36px 20px 12px;
+    border-radius: 28px;
+    background:
+      radial-gradient(500px 180px at 70% 0%, color-mix(in srgb, var(--accent2) 30%, transparent), transparent),
+      radial-gradient(400px 160px at 25% 30%, color-mix(in srgb, var(--accent) 18%, transparent), transparent),
+      var(--panel);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .home-hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800;
+    letter-spacing: -0.03em; margin-bottom: 8px;
+  }
+  .home-hero p { color: var(--muted); font-size: 0.95rem; max-width: 520px; margin: 0 auto 8px; }
+  .home-hero a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .home-hero a:hover { text-decoration: underline; }
+  .home-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  @media (max-width: 800px) { .home-grid { grid-template-columns: 1fr; } }
+  .home-tile {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+    transition: transform .18s ease, border-color .18s;
+  }
+  .home-tile:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+  }
+  .home-tile h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .home-tile p { color: var(--muted); font-size: 0.86rem; margin-bottom: 16px; min-height: 44px; line-height: 1.55; }
+  .home-tile .btn-primary {
+    width: 100%; border-radius: 12px; padding: 12px; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--accent2)));
+    color: #111; border: none;
+  }
+  [data-theme="dark"] .home-tile .btn-primary { color: #062016; }
+  [data-theme="light"] .home-tile .btn-primary { color: #fff; }
+
+  /* ——— App shell ——— */
+  .shell { display: none; min-height: 100vh; }
+  body.mode-app .shell { display: flex !important; }
+  body.mode-gate .shell, body.mode-home .shell { display: none !important; }
+  body.mode-app #gateScreen, body.mode-app #homeScreen { display: none !important; }
+
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    padding: 20px 14px;
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column; gap: 2px;
+    /* no heavy blur */
+  }
+  .side-brand {
+    font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em;
+    padding: 4px 10px 2px; margin-bottom: 2px;
+  }
+  .side-brand span { color: var(--accent); }
+  .side-user {
+    font-size: 0.78rem; color: var(--muted); padding: 0 10px 14px;
+    border-bottom: 1px solid var(--border); margin-bottom: 10px;
+  }
+  .side-label {
+    font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); padding: 12px 10px 6px;
+  }
+  .sidebar button.side-tab {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; background: transparent;
+    border: 1px solid transparent; color: var(--muted);
+    border-radius: 12px; padding: 11px 12px; margin-bottom: 3px;
+    cursor: pointer; font-weight: 600; font-size: 0.88rem; font-family: inherit;
+    transition: 0.15s ease;
+  }
+  .sidebar button.side-tab:hover { background: var(--panel2); color: var(--text); }
+  .sidebar button.side-tab.active {
+    background: var(--accent-dim);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    color: var(--text);
+  }
+  .main-col { flex: 1; min-width: 0; padding: 20px 22px 48px; }
+  .wrap { max-width: 1400px; margin: 0 auto; }
+
+  /* ——— Buttons ——— */
+  button, .btn {
+    cursor: pointer; border: none; border-radius: 10px; font-size: 0.82rem;
+    font-weight: 600; padding: 8px 14px; font-family: inherit;
+    transition: transform .12s, opacity .15s, background .15s;
+  }
+  button:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--accent); color: #0a1620;
+  }
+  [data-theme="light"] .btn-primary { color: #fff; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:disabled { opacity: 0.5; cursor: wait; }
+  .btn-ghost {
+    background: var(--panel2); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--border-strong); }
+  .btn-green { background: var(--green-dim); color: var(--green); border: 1px solid color-mix(in srgb, var(--green) 35%, transparent); }
+  .btn-orange { background: rgba(240,193,74,0.12); color: var(--orange); border: 1px solid rgba(240,193,74,0.35); }
+
+  /* ——— Header / brand in views ——— */
+  header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 14px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .brand h1 {
+    font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em;
+  }
+  .brand .sub { color: var(--muted); font-size: 0.84rem; margin-top: 4px; max-width: 560px; }
+  .brand a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .live-dot {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 6px 12px; font-size: 0.75rem; color: var(--muted);
+  }
+  .live-dot i {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+
+  /* ——— Stats ——— */
+  .stats {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 14px;
+  }
+  @media (max-width: 1100px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat .lbl {
+    font-size: 0.65rem; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+  .stat .val {
+    font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .stat .val.green { color: var(--green); }
+  .stat .val.orange { color: var(--orange); }
+
+  /* ——— Panels / boxes ——— */
+  .boxes, .scanner-panels {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;
+  }
+  @media (max-width: 960px) {
+    .boxes, .scanner-panels { grid-template-columns: 1fr; }
+    .shell { flex-direction: column; }
+    .sidebar {
+      width: 100%; height: auto; position: relative;
+      border-right: none; border-bottom: 1px solid var(--border);
+      flex-direction: row; flex-wrap: wrap; align-items: center;
+      padding: 12px;
+    }
+    .side-user { border: none; margin: 0; padding: 0 8px; }
+  }
+  .box, .ops-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .box h3, .ops-card h3 {
+    font-size: 0.78rem; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px;
+  }
+  .fields {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;
+  }
+  .field label {
+    display: block; font-size: 0.68rem; font-weight: 600; color: var(--muted);
+    margin-bottom: 5px; letter-spacing: 0.02em;
+  }
+  .field input, .field select, .drawer input.q, .recipe-search-wrap input {
+    width: 100%; background: var(--panel2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); padding: 9px 11px;
+    font-size: 0.86rem; font-family: inherit; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field input:focus, .field select:focus, .drawer input.q:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+  .field .hint { font-size: 0.65rem; color: var(--muted); margin-top: 3px; }
+  .row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+  .check-row {
+    display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px;
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .check-row label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  /* ——— Table ——— */
+  .table-wrap {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .table-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; border-bottom: 1px solid var(--border); gap: 10px; flex-wrap: wrap;
+  }
+  .table-head h2 { font-size: 0.95rem; font-weight: 700; }
+  .table-head .count {
+    background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 3px 10px; font-size: 0.75rem; color: var(--muted);
+  }
+  .scroll { overflow: auto; max-height: calc(100vh - 260px); }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--panel-solid);
+    color: var(--muted); font-size: 0.65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    text-align: left; padding: 11px 12px;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  tbody td {
+    padding: 11px 12px; border-bottom: 1px solid var(--border);
+    font-size: 0.84rem; vertical-align: middle;
+  }
+  tbody tr { }
+  tbody tr:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+  thead th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .shard-name { font-weight: 650; display: block; }
+  .shard-id { font-size: 0.68rem; color: var(--muted); display: block; margin-top: 2px; }
+  .money.pos, td.money.pos { color: var(--green); font-weight: 700; }
+  .money.neg { color: var(--red); }
+  .badge {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+  }
+  .badge.yes, .badge-fair { background: var(--green-dim); color: var(--green); }
+  .badge.no, .badge-pumped { background: rgba(255,123,132,0.15); color: var(--red); }
+  .badge-discount { background: rgba(240,193,74,0.15); color: var(--orange); }
+  .actions { white-space: nowrap; }
+  .actions a, .linkish {
+    color: var(--accent2); background: none; border: none; cursor: pointer;
+    font-size: 0.78rem; font-weight: 600; font-family: inherit; text-decoration: none;
+    padding: 2px 4px;
+  }
+  .actions a:hover, .linkish:hover { text-decoration: underline; }
+  .star { cursor: pointer; opacity: 0.35; background: none; border: none; font-size: 1rem; }
+  .star.on { opacity: 1; color: var(--gold); }
+
+  /* status / note */
+  .status-bar {
+    display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    margin-top: 10px; font-size: 0.75rem; color: var(--muted);
+  }
+  .note {
+    margin-top: 12px; padding: 12px 14px; border-radius: 12px;
+    background: var(--panel2); border: 1px solid var(--border);
+    font-size: 0.8rem; color: var(--muted); line-height: 1.55;
+  }
+  .note strong { color: var(--text); }
+  .err {
+    display: none; margin-bottom: 12px; padding: 12px 14px;
+    background: rgba(255,123,132,0.1); border: 1px solid rgba(255,123,132,0.35);
+    color: var(--red); border-radius: 12px; font-size: 0.85rem;
+  }
+
+  /* detail modal — wide, full content */
+  .drawer-bg {
+    display: none; position: fixed; inset: 0; z-index: 80;
+    background: rgba(0,0,0,0.62);
+    align-items: center; justify-content: center;
+    padding: 24px 16px;
+    /* no heavy blur */
+  }
+  .drawer-bg.open { display: flex; }
+  .drawer {
+    width: min(980px, 100%);
+    max-height: min(92vh, 920px);
+    background: var(--panel-solid);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+    display: flex; flex-direction: column;
+  }
+  .drawer-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 12px; padding: 20px 22px 12px; border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .drawer-body {
+    padding: 16px 22px 22px; overflow-y: auto; flex: 1;
+  }
+  .drawer h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.02em; }
+  .drawer .sub { color: var(--muted); font-size: 0.82rem; margin-bottom: 0; }
+  .drawer .grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0;
+  }
+  @media (max-width: 720px) {
+    .drawer .grid { grid-template-columns: repeat(2, 1fr); }
+    .drawer { max-height: 96vh; border-radius: 16px; }
+  }
+  .drawer .card {
+    background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 12px 14px;
+  }
+  .drawer .card .lbl {
+    font-size: 0.62rem; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .drawer .card .val {
+    font-size: 1.15rem; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums;
+  }
+  .drawer .card .val.green { color: var(--green); }
+  .drawer .card .val.red { color: var(--red); }
+  .drawer label.q { font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 5px; font-weight: 600; }
+  .drawer input.q { margin-bottom: 4px; max-width: 220px; }
+  .drawer .actions-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .drawer .close {
+    background: var(--panel2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 10px; padding: 8px 12px; cursor: pointer;
+    font-size: 0.82rem; font-weight: 600; flex-shrink: 0;
+  }
+  .drawer .close:hover { color: var(--text); border-color: var(--border-strong); }
+  .mat-section {
+    margin-top: 8px; border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; background: var(--panel2);
+  }
+  .mat-section-head {
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    font-size: 0.72rem; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .mat-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 0; }
+  .mat-table th {
+    text-align: left; color: var(--muted); font-size: 0.65rem; text-transform: uppercase;
+    padding: 10px 14px; border-bottom: 1px solid var(--border); font-weight: 700;
+    background: color-mix(in srgb, var(--panel-solid) 80%, transparent);
+  }
+  .mat-table td {
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .mat-table tr:last-child td { border-bottom: none; }
+  .mat-table th.num, .mat-table td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .trip-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .trip-pill {
+    display: inline-flex; align-items: center;
+    background: var(--panel-solid); border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 10px; font-size: 0.75rem; color: var(--text);
+    white-space: nowrap;
+  }
+  .trip-pill em {
+    font-style: normal; color: var(--muted); margin-right: 6px; font-size: 0.68rem; font-weight: 700;
+  }
+  .trip-box {
+    margin: 0; border: none; border-radius: 0; border-top: 1px solid var(--border);
+    padding: 12px 14px; background: transparent; font-size: 0.82rem;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .ops-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .ops-card p.desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .ops-card .big { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; margin: 8px 0; }
+  .ops-card .big.green { color: var(--green); }
+  .ops-card .big.orange { color: var(--orange); }
+  .ops-card .big.red { color: var(--red); }
+  .ops-card textarea {
+    width: 100%; min-height: 80px; background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text); padding: 10px; font-family: inherit; font-size: 0.86rem;
+  }
+  .log-list { list-style: none; max-height: 180px; overflow-y: auto; font-size: 0.82rem; }
+  .log-list li {
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; gap: 8px;
+  }
+  .warn-banner {
+    background: rgba(240,193,74,0.1); border: 1px solid rgba(240,193,74,0.35);
+    color: var(--orange); padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 12px;
+  }
+  .ok-banner {
+    background: var(--green-dim); border: 1px solid color-mix(in srgb, var(--green) 35%, transparent);
+    color: var(--green); padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 12px;
+  }
+
+  .budget-table, .mat-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 8px; }
+  .budget-table th, .mat-table th {
+    text-align: left; color: var(--muted); font-size: 0.65rem; text-transform: uppercase;
+    padding: 8px; border-bottom: 1px solid var(--border); font-weight: 700;
+  }
+  .budget-table td, .mat-table td { padding: 8px; border-bottom: 1px solid var(--border); }
+  .budget-table th.num, .budget-table td.num, .mat-table th.num, .mat-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .chip {
+    display: inline-block; font-size: 0.7rem; color: var(--muted);
+    background: var(--panel2); border-radius: 999px; padding: 2px 9px; margin-left: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .recipe-search-wrap { position: relative; max-width: 420px; }
+  .recipe-suggest {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 20;
+    background: var(--panel-solid); border: 1px solid var(--border); border-radius: 12px;
+    max-height: 240px; overflow-y: auto; margin-top: 6px; display: none;
+    box-shadow: var(--shadow);
+  }
+  .recipe-suggest.open { display: block; }
+  .recipe-suggest button {
+    display: flex; width: 100%; text-align: left; gap: 10px; align-items: center;
+    padding: 11px 12px; border: none; background: transparent; color: var(--text);
+    cursor: pointer; font-family: inherit; border-bottom: 1px solid var(--border);
+  }
+  .recipe-suggest button:hover { background: var(--accent-dim); }
+  .recipe-suggest .rn { font-weight: 650; }
+  .recipe-suggest .rm { font-size: 0.72rem; color: var(--muted); }
+  .recipe-best {
+    background: var(--accent-dim); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 12px; padding: 12px 14px; margin: 10px 0; font-size: 0.88rem;
+  }
+  .recipe-best .lbl { font-size: 0.65rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+  .trip-box {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 12px; margin-top: 8px; font-size: 0.8rem; color: var(--muted);
+  }
+  .trip-box strong { color: var(--text); }
+
+  .appbar { display: none; }
+  .topnav { display: none; }
+  .theme-wrap, .theme-menu, .theme-btn { display: none; }
+
+  .guide-block {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    padding: 18px; margin-bottom: 12px; line-height: 1.65; box-shadow: var(--shadow);
+  }
+  .guide-block h3 { font-size: 1rem; margin-bottom: 8px; }
+  .guide-block p, .guide-block li { font-size: 0.9rem; color: var(--muted); }
+  .guide-block ul { padding-left: 18px; margin: 8px 0; }
+  .guide-block strong { color: var(--text); }
+  .guide-block .ex {
+    background: var(--panel2); border-radius: 10px; padding: 10px 12px; margin-top: 8px;
+    font-size: 0.85rem; color: var(--text); border: 1px solid var(--border);
+  }
+  .changelog { display: none; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body class="mode-gate">
+<!-- LOGIN -->
+<div class="gate" id="gateScreen">
+  <div class="gate-card">
+    <h1>مركز الشردات</h1>
+    <p class="sub">كل حاجتك في مكان واحد — سجّل اسمك عشان نحفظ إعداداتك هنا على الجهاز.</p>
+    <label>اسمك</label>
+    <input type="text" id="authUser" placeholder="Amr" autocomplete="username" />
+    <label>كلمة سر بسيطة (محلية فقط)</label>
+    <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password" />
+    <p style="font-size:0.72rem;color:var(--muted);margin-top:8px">مش سيرفر — الاسم والباس يتسجلوا في متصفحك بس.</p>
+    <button type="button" class="btn-primary" onclick="doLogin()">دخول</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="gate home-screen" id="homeScreen">
+  <div class="home-wrap">
+    <div class="home-hero">
+      <h1>مركز الشردات</h1>
+      <p>كل حاجتك في مكان واحد — فلبات، دمج، خطط ميزانية، ومكتبك.</p>
+      <p style="margin-top:-8px"><span id="homeHello">مرحباً</span> · 
+        <a href="#" onclick="editProfile();return false;" style="color:var(--accent)">تغيير الاسم / الخروج</a>
+      </p>
+    </div>
+    <div class="home-grid">
+      <div class="home-tile">
+        <h3>الأدوات</h3>
+        <p>الماسح، المكتب، راوتر الميزانية، والريسبيز — ادخل من هنا.</p>
+        <button type="button" class="btn-primary" onclick="enterApp('flip')">افتح الأدوات</button>
+      </div>
+      <div class="home-tile">
+        <h3>الماسح مباشرة</h3>
+        <p>روح على جدول الفلبات والأرقام على طول.</p>
+        <button type="button" class="btn-primary" onclick="enterApp('flip')">Flip Scanner</button>
+      </div>
+      <div class="home-tile">
+        <h3>الشكل · Aurora</h3>
+        <p>ثيم بنفسجي/ذهبي مريح للعين — أو غامق / فاتح.</p>
+        <button type="button" class="btn-primary" onclick="setTheme('aurora')">تفعيل Aurora</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shell" id="appShell">
+  <aside class="sidebar">
+    <div class="side-brand">Amr <span>· Tools</span></div>
+    <div class="side-user" id="sideUser">—</div>
+    <div class="side-label">Tools</div>
+    <button type="button" class="side-tab active" id="tabFlip" onclick="switchView('flip')">Scanner</button>
+    <button type="button" class="side-tab" id="tabOps" onclick="switchView('ops')">Desk</button>
+    <button type="button" class="side-tab" id="tabBudget" onclick="switchView('budget')">Router</button>
+    <button type="button" class="side-tab" id="tabRecipes" onclick="switchView('recipes')">Recipes</button>
+    <div class="side-label">More</div>
+    <button type="button" class="side-tab" onclick="showHome()">الرئيسية</button>
+    <button type="button" class="side-tab" onclick="toggleThemeMenuSide()">الثيم ◐</button>
+    <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">
+      <button type="button" class="btn-ghost" style="flex:1;padding:6px;font-size:0.72rem" onclick="setTheme('aurora')">Aurora</button>
+      <button type="button" class="btn-ghost" style="flex:1;padding:6px;font-size:0.72rem" onclick="setTheme('dark')">Dark</button>
+      <button type="button" class="btn-ghost" style="flex:1;padding:6px;font-size:0.72rem" onclick="setTheme('light')">Light</button>
+    </div>
+    <div style="margin-top:16px">
+      <span class="live-dot" id="liveStatus" style="font-size:0.72rem"><i></i> Ready</span>
+    </div>
+  </aside>
+  <div class="main-col wrap">
+
+  <div class="view active" id="viewFlip">
+  <header>
+    <div class="brand">
+      <div style="font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Hypixel SkyBlock</div>
+      <h1>SkyShard Flip Scanner</h1>
+      <div class="sub">
+        SkyShards-matched discrete tree cost · live Bazaar ·
+        <a href="https://skyshards.com" target="_blank" rel="noopener">SkyShards</a> ·
+        <a href="https://www.skyblock.bz" target="_blank" rel="noopener">Bazaar Meta</a>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="live-dot" id="liveStatus"><i></i> Loading</span>
+      <button class="btn-ghost" type="button" onclick="showAllShards()">Show all shards</button>
+      <button class="btn-ghost" type="button" onclick="exportCSV()">Export CSV</button>
+      <button class="btn-orange" type="button" onclick="showTopN()">Top 10 flips</button>
+      <button class="btn-primary" id="btnRefresh" type="button" onclick="refresh(true)">Refresh</button>
+    </div>
+  </header>
+
+  <div id="errorBox" class="error" style="display:none"></div>
+
+  <div class="stats">
+    <div class="stat"><div class="label">Total Profit (filtered)</div><div class="value green" id="statProfit">—</div></div>
+    <div class="stat"><div class="label">Total Coins Saved</div><div class="value green" id="statSaved">—</div></div>
+    <div class="stat"><div class="label">Hourly Instabuys (sum)</div><div class="value blue" id="statHourly">—</div></div>
+    <div class="stat"><div class="label">Scanned / Shown</div><div class="value" id="statScanned">—</div></div>
+    <div class="stat"><div class="label">vs last scan</div><div class="value orange" id="statDelta">—</div></div>
+  </div>
+
+  <div class="panel-grid">
+    <div class="box">
+      <h3>SkyShards settings (you control)</h3>
+      <div class="fields">
+        <div class="field">
+          <label>Price mode</label>
+          <select id="fInstant">
+            <option value="instant" selected>Instant Buy</option>
+            <option value="order">Buy Order</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Crocodile level</label>
+          <input type="number" id="fCroc" value="10" min="0" max="10" step="1" />
+          <span class="hint">0–10 · mult = 1 + 2×lvl/100</span>
+        </div>
+        <div class="field">
+          <label>Craft penalty</label>
+          <input type="number" id="fPenalty" value="1000" min="0" step="100" />
+          <span class="hint">coins per fusion</span>
+        </div>
+        <div class="field">
+          <label>Auto-refresh (minutes)</label>
+          <input type="number" id="fRefreshMin" value="30" min="0" max="120" step="1" />
+          <span class="hint">0 = off</span>
+        </div>
+        <div class="field">
+          <label>Bazaar tax %</label>
+          <input type="number" id="fTax" value="1.25" min="0" max="5" step="0.05" />
+        </div>
+      </div>
+      <div class="row-actions">
+        <button class="btn-primary" type="button" onclick="rebuildFromSettings()">Apply settings &amp; recalculate</button>
+        <button class="btn-ghost" type="button" onclick="resetSettings()">Reset to your defaults</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>Filters (you control)</h3>
+      <div class="fields">
+        <div class="field">
+          <label>Search</label>
+          <input type="text" id="fSearch" placeholder="Quake, SHARD_..." oninput="debounceRender()" />
+        </div>
+        <div class="field">
+          <label>Show</label>
+          <select id="fShow" onchange="onShowChange()">
+            <option value="all">All shards (full list)</option>
+            <option value="good">Good flips only (filters below)</option>
+            <option value="profit">Profitable only (save &gt; 0)</option>
+            <option value="loss">Losing / zero only</option>
+            <option value="fav">Favorites only</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Min Save Coins</label>
+          <input type="number" id="fMinSaved" value="20000" min="0" step="1000" oninput="debounceRender()" />
+        </div>
+        <div class="field">
+          <label>Min Hourly Instabuys</label>
+          <input type="number" id="fMinHourly" value="100" min="0" step="10" oninput="debounceRender()" />
+        </div>
+        <div class="field">
+          <label>Min profit % (optional)</label>
+          <input type="number" id="fMinRatio" value="0" min="0" max="500" step="1" oninput="debounceRender()" />
+          <span class="hint">0 = off · e.g. 30 = save at least 30% of cost</span>
+        </div>
+        <div class="field">
+          <label>Max budget (optional)</label>
+          <input type="number" id="fMaxCost" value="0" min="0" step="10000" oninput="debounceRender()" />
+          <span class="hint">0 = no limit · max Total Cost to enter a flip</span>
+        </div>
+        <div class="field">
+          <label>Show only top N</label>
+          <input type="number" id="fTopN" value="0" min="0" max="100" step="1" oninput="debounceRender()" />
+          <span class="hint">0 = show all matching · set 10 for top 10 only</span>
+        </div>
+        <div class="field">
+          <label>Sort by</label>
+          <select id="fSort" onchange="debounceRender()">
+            <option value="saved">Save Coins</option>
+            <option value="ratio">Save ratio %</option>
+            <option value="profit">Total Profit</option>
+            <option value="hourly">Hourly Instabuys</option>
+            <option value="cost">Total Cost</option>
+            <option value="cps">Cost / Shard</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="row-actions" style="margin-top:8px">
+        <span style="font-size:0.72rem;color:var(--muted);width:100%;margin-bottom:2px">Quick profiles</span>
+        <button type="button" class="btn-ghost" onclick="applyProfile('balanced')">Best overall</button>
+        <button type="button" class="btn-ghost" onclick="applyProfile('fast')">Fast flips (high demand)</button>
+        <button type="button" class="btn-ghost" onclick="applyProfile('cheap')">Cheap entry</button>
+        <button type="button" class="btn-ghost" onclick="applyProfile('whale')">High save $</button>
+        <button type="button" class="btn-ghost" onclick="applyProfile('safe')">Safer (firm price)</button>
+      </div>
+<div class="check-row">
+        <label><input type="checkbox" id="fFlipOnly" onchange="debounceRender()" /> Flip only (hide Gather)</label>
+        <label><input type="checkbox" id="fHideLoss" onchange="debounceRender()" /> Hide NO rows</label>
+        <label><input type="checkbox" id="fHidePumped" onchange="debounceRender()" /> Hide Red zone (off by default)</label>
+      </div>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:0.75rem;color:var(--muted)">
+        <span><span class="badge badge-pumped">Red zone</span> stretched price</span>
+        <span><span class="badge badge-fair">Fair</span> normal</span>
+        <span><span class="badge badge-discount">Not bad</span> softer bias</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-head">
+      <h2 id="tableTitle">Shards</h2>
+      <span class="count" id="resultCount">—</span>
+      <span style="font-size:0.72rem;color:var(--muted);margin-left:auto">Price tag = Red zone / Fair / Not bad</span>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Shard</th>
+            <th>Rarity</th>
+            <th>Type</th>
+            <th class="num">Cost / Shard</th>
+            <th class="num">Total Cost</th>
+            <th class="num">Save Coins</th>
+            <th class="num">Save %</th>
+            <th class="num">Produced</th>
+            <th class="num">Hourly</th>
+            <th>Price tag</th>
+            <th class="num">Δ Save</th>
+            <th>Profitable</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="14" class="loading">Loading fusion data &amp; bazaar prices…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <span id="statusText">Initializing…</span>
+    <span>Local file · Settings &amp; favorites saved in this browser</span>
+  </div>
+
+  <div class="note">
+    <strong>Calculation:</strong> same discrete fusion tree as SkyShards (ceil crafts, craft penalty per fusion, crocodile on reptile recipes).
+    <strong>Save Coins</strong> = produced × insta-buy − total craft cost.
+    <strong>Show all shards</strong> button or dropdown → full list (clears Top N).
+    <strong>Top 10 flips</strong> = good flips only, limited to 10 — press Show all shards to exit.
+    Min profit % / Max budget = optional; leave 0 to ignore.
+    Profiles = one-click filters. <strong>Price bias</strong> = rough signal from order book + weekly volume (not a prediction guarantee).
+    Click name / <strong>Calc</strong> = quantity spend/save. Star = favorite. Δ Save = vs last scan.
+  </div>
+  </div><!-- /viewFlip -->
+
+  <div class="view" id="viewOps">
+    <header style="margin-bottom:14px">
+      <div class="brand">
+        <div style="font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Personal ops</div>
+        <h1>Horizon Desk</h1>
+        <div class="sub">Goals, daily log, ban timer, shift note — saved only in <strong>your</strong> browser. Not linked to Discord or Hypixel accounts.</div>
+      </div>
+    </header>
+
+    <div id="opsAlert"></div>
+
+    <div class="ops-grid">
+      <div class="ops-card">
+        <h3>Net worth goal</h3>
+        <p class="desc">Track progress to a coin target. Days left estimate uses your average daily gain (from the log or the number you set).</p>
+        <div class="fields">
+          <div class="field"><label>Current net worth</label><input type="number" id="nwNow" value="0" placeholder="500m" title="k/m/b ok" oninput="saveOps(); renderOps()" /></div>
+          <div class="field"><label>Goal</label><input type="number" id="nwGoal" value="4b" placeholder="4b" title="k/m/b ok" oninput="saveOps(); renderOps()" /></div>
+          <div class="field"><label>Account start date</label><input type="date" id="nwStart" oninput="saveOps(); renderOps()" /></div>
+          <div class="field"><label>Avg coins / day (manual)</label><input type="number" id="nwPerDay" value="0" placeholder="50m" title="k/m/b ok" oninput="saveOps(); renderOps()" /><span class="hint">0 = use average from daily log</span></div>
+        </div>
+        <div class="big green" id="nwLeft">—</div>
+        <div style="font-size:0.82rem;color:var(--muted)" id="nwMeta">—</div>
+      </div>
+
+      <div class="ops-card">
+        <h3>Daily earnings log</h3>
+        <p class="desc">Write what you made today. Used for average/day and “behind schedule” warnings.</p>
+        <div class="fields">
+          <div class="field"><label>Date</label><input type="date" id="logDate" /></div>
+          <div class="field"><label>Coins earned</label><input type="number" id="logAmt" value="0" placeholder="25m" title="k/m/b ok" /></div>
+        </div>
+        <div class="field"><label>Note (optional)</label><input type="text" id="logNote" placeholder="flips, mining, …" /></div>
+        <div class="row-actions">
+          <button type="button" class="btn-primary" onclick="addLogEntry()">Add day</button>
+          <button type="button" class="btn-ghost" onclick="clearLog()">Clear log</button>
+        </div>
+        <ul class="log-list" id="logList"></ul>
+      </div>
+
+      <div class="ops-card">
+        <h3>Ban timer</h3>
+        <p class="desc">Personal reminder only. Enter when a ban ends — the desk shows time left. Does not talk to Hypixel.</p>
+        <div class="fields">
+          <div class="field"><label>Minecraft name (label)</label><input type="text" id="banName" placeholder="Optional" oninput="saveOps()" /></div>
+          <div class="field"><label>Ban ends (date &amp; time)</label><input type="datetime-local" id="banEnd" oninput="saveOps(); renderOps()" /></div>
+        </div>
+        <div class="big" id="banLeft">—</div>
+        <div style="font-size:0.82rem;color:var(--muted)" id="banMeta">No ban end set</div>
+        <div class="row-actions">
+          <button type="button" class="btn-ghost" onclick="clearBan()">Clear ban timer</button>
+        </div>
+      </div>
+
+      <div class="ops-card">
+        <h3>Shift note</h3>
+        <p class="desc">Optional personal schedule note (not a lock). Example: Sun–Thu 18:00–02:00.</p>
+        <div class="fields">
+          <div class="field"><label>Shift label</label><input type="text" id="shiftLabel" placeholder="Evening shift" oninput="saveOps()" /></div>
+          <div class="field"><label>Start hour (0–23)</label><input type="number" id="shiftStart" min="0" max="23" value="18" oninput="saveOps(); renderOps()" /></div>
+          <div class="field"><label>End hour (0–23)</label><input type="number" id="shiftEnd" min="0" max="23" value="2" oninput="saveOps(); renderOps()" /></div>
+        </div>
+        <div class="big" id="shiftStatus">—</div>
+        <div style="font-size:0.82rem;color:var(--muted)" id="shiftMeta">—</div>
+      </div>
+
+
+      <div class="ops-card" style="grid-column: 1 / -1">
+        <h3>Free notes</h3>
+        <p class="desc">Anything you want to remember. Local only.</p>
+        <textarea id="opsNotes" placeholder="Ideas, accounts labels, links…" oninput="saveOps()"></textarea>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:14px">
+      <strong>Horizon Desk</strong> is separate from the Flip Scanner. Nothing here is sent to a server.
+      Ban timer is a countdown you set yourself — not an unofficial Hypixel API.
+      For flips, switch back to <strong>Flip Scanner</strong>.
+    </div>
+  </div><!-- /viewOps -->
+
+  <div class="view" id="viewBudget">
+    <header style="margin-bottom:14px">
+      <div class="brand">
+        <div style="font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Capital allocation</div>
+        <h1>Stack Router</h1>
+        <div class="sub">
+          Enter a budget (use <strong>k</strong> / <strong>m</strong> / <strong>b</strong> — e.g. <code>500m</code>, <code>1.5b</code>).
+          The planner spends it across profitable shard flips from the live scan and estimates save.
+          Run <strong>Flip Scanner → Refresh</strong> first so prices are loaded.
+        </div>
+      </div>
+    </header>
+
+    <div class="ops-grid">
+      <div class="ops-card">
+        <h3>Budget</h3>
+        <p class="desc">How much you want to deploy into flips. Examples: <code>100m</code> · <code>1b</code> · <code>250k</code></p>
+        <div class="fields">
+          <div class="field">
+            <label>Budget</label>
+            <input type="text" id="bBudget" value="1b" placeholder="1b" onkeydown="if(event.key==='Enter')runBudgetPlan()" />
+          </div>
+          <div class="field">
+            <label>Strategy</label>
+            <select id="bStrategy">
+              <option value="ratio">Best save % first (efficient)</option>
+              <option value="saved" selected>Highest save $ first</option>
+              <option value="hourly">Highest demand first</option>
+              <option value="balanced">Balanced (save × demand score)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Min save / craft cycle</label>
+            <input type="text" id="bMinSave" value="20k" />
+            <span class="hint">Skip weak flips</span>
+          </div>
+          <div class="field">
+            <label>Min hourly instabuys</label>
+            <input type="number" id="bMinHourly" value="50" min="0" step="10" />
+          </div>
+          <div class="field">
+            <label>Max shards in plan</label>
+            <input type="number" id="bMaxShards" value="12" min="1" max="50" />
+          </div>
+          <div class="field">
+            <label>Max % of budget per shard</label>
+            <input type="number" id="bMaxPct" value="35" min="5" max="100" step="5" />
+            <span class="hint">Diversify — 100 = allow all-in on one</span>
+          </div>
+        </div>
+        <div class="check-row" style="margin-top:8px">
+          <label><input type="checkbox" id="bSkipPumped" checked /> Skip Red zone — fill plan with Fair / Not bad instead</label>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="btn-primary" onclick="runBudgetPlan()">Build plan</button>
+          <button type="button" class="btn-ghost" onclick="exportBudgetCSV()">Export plan CSV</button>
+        </div>
+        <p class="desc" style="margin-top:8px">
+          <span class="badge badge-pumped">Red zone</span> stretched / risky print ·
+          <span class="badge badge-fair">Fair</span> normal ·
+          <span class="badge badge-discount">Not bad</span> softer bias
+        </p>
+      </div>
+
+      <div class="ops-card">
+        <h3>Summary</h3>
+        <p class="desc">After the plan runs</p>
+        <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="card"><div class="lbl">Budget</div><div class="val" id="bpBudget">—</div></div>
+          <div class="card"><div class="lbl">Allocated</div><div class="val" id="bpSpent">—</div></div>
+          <div class="card"><div class="lbl">Left unused</div><div class="val" id="bpLeft">—</div></div>
+          <div class="card"><div class="lbl">Est. save (coins)</div><div class="val green" id="bpSave">—</div></div>
+          <div class="card"><div class="lbl">Est. after tax</div><div class="val green" id="bpProfit">—</div></div>
+          <div class="card"><div class="lbl">Return on spend</div><div class="val" id="bpRoi">—</div></div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--muted);margin-top:10px" id="bpNote">
+          Estimates assume you can buy materials and sell/use at current insta-buy math (same as scanner). Market moves — not a guarantee.
+        </p>
+      </div>
+    </div>
+
+    <div class="ops-card" style="margin-top:12px">
+      <h3>Recommended stack <span class="chip" id="bpCount">0 lines</span></h3>
+      <div style="overflow:auto">
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Shard</th>
+              <th class="num">Cycles</th>
+              <th class="num">You produce</th>
+              <th class="num">Spend</th>
+              <th class="num">Est. save</th>
+              <th class="num">Save %</th>
+              <th class="num">Hourly</th>
+              <th>Price tag</th>
+            </tr>
+          </thead>
+          <tbody id="bpBody">
+            <tr><td colspan="8" style="color:var(--muted);padding:16px">Set budget and press Build plan (refresh Flip Scanner data first).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /viewBudget -->
+
+  <div class="view" id="viewRecipes">
+    <header style="margin-bottom:14px">
+      <div class="brand">
+        <div style="font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Input → best outputs</div>
+        <h1>Recipes</h1>
+        <div class="sub">
+          Type a gathered shard (e.g. Shellwise). We only list <strong>profitable</strong> outputs —
+          ranked by profit. No zero-save junk. Refresh Flip Scanner first for live prices.
+        </div>
+      </div>
+    </header>
+
+    <div class="ops-grid">
+      <div class="ops-card">
+        <h3>Input shard</h3>
+        <p class="desc">Search by name or id — same idea as SkyShards “Input Shard”.</p>
+        <div class="recipe-search-wrap">
+          <input type="text" id="rSearch" placeholder="Search for a shard…" autocomplete="off"
+            oninput="recipeSuggest()" onkeydown="recipeSearchKey(event)" />
+          <div class="recipe-suggest" id="rSuggest"></div>
+        </div>
+        <div style="margin-top:10px;font-size:0.85rem" id="rSelectedLabel">
+          <span style="color:var(--muted)">No shard selected</span>
+        </div>
+        <div class="fields" style="margin-top:12px">
+          <div class="field">
+            <label>Your input cost</label>
+            <select id="rOwnCost" onchange="runRecipes()">
+              <option value="buy" selected>Count at Instant Buy (like SkyShards)</option>
+              <option value="free">I already have it (cost 0)</option>
+              <option value="sell">Opportunity cost (Insta-Sell)</option>
+            </select>
+            <span class="hint">Use Instant Buy to match SkyShards save math</span>
+          </div>
+          <div class="field">
+            <label>Min profit / cycle</label>
+            <input type="text" id="rMinProfit" value="1" onchange="runRecipes()" />
+            <span class="hint">k / m / b ok · only profit &gt; 0 always</span>
+          </div>
+          <div class="field">
+            <label>Min hourly (output)</label>
+            <input type="number" id="rMinHourly" value="0" min="0" step="10" onchange="runRecipes()" />
+          </div>
+          <div class="field">
+            <label>Min save %</label>
+            <input type="number" id="rMinRatio" value="0" min="0" step="5" onchange="runRecipes()" />
+          </div>
+          <div class="field">
+            <label>Sort by</label>
+            <select id="rSort" onchange="runRecipes()">
+              <option value="profit" selected>Profit / cycle</option>
+              <option value="ratio">Profit %</option>
+              <option value="hourly">Hourly demand</option>
+              <option value="profitPerInput">Profit per 1 input shard</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Top N (0 = all)</label>
+            <input type="number" id="rTopN" value="30" min="0" max="200" onchange="runRecipes()" />
+          </div>
+        </div>
+        <div class="check-row" style="margin-top:8px">
+          <label><input type="checkbox" id="rSkipPumped" checked onchange="runRecipes()" /> Skip Red zone — show Fair / Not bad only</label>
+        </div>
+        <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:0.75rem;color:var(--muted)">
+          <span><span class="badge badge-pumped">Red zone</span> stretched</span>
+          <span><span class="badge badge-fair">Fair</span> normal</span>
+          <span><span class="badge badge-discount">Not bad</span> softer</span>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="btn-primary" onclick="runRecipes()">Find best flips</button>
+          <button type="button" class="btn-ghost" onclick="clearRecipeInput()">Clear</button>
+        </div>
+      </div>
+
+      <div class="ops-card">
+        <h3>Summary</h3>
+        <p class="desc">Best uses for your input</p>
+        <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="card"><div class="lbl">Input</div><div class="val" id="rpName" style="font-size:1rem">—</div></div>
+          <div class="card"><div class="lbl">Recipes found</div><div class="val" id="rpCount">—</div></div>
+          <div class="card"><div class="lbl">Best profit / cycle</div><div class="val green" id="rpBest">—</div></div>
+          <div class="card"><div class="lbl">Best output</div><div class="val" id="rpBestOut" style="font-size:0.95rem">—</div></div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--muted);margin-top:10px" id="rpHint">
+          Select a shard to see fusions. Split across several high-demand outputs if one line is too large to sell.
+        </p>
+      </div>
+    </div>
+
+    <div class="ops-card" style="margin-top:12px">
+      <h3>Profitable flips only <span class="chip" id="rpLines">0</span></h3>
+      <p class="desc" style="margin-top:-4px">No recipe clutter — only outputs that make profit with your settings.</p>
+      <div style="overflow:auto">
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Flip into (output)</th>
+              <th class="num">Your shards / craft</th>
+              <th class="num">Out / craft</th>
+              <th class="num">Cost / craft</th>
+              <th class="num">Save / craft</th>
+              <th class="num">Cost / out</th>
+              <th class="num">Save %</th>
+              <th class="num">Hourly</th>
+              <th>Price tag</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rpBody">
+            <tr><td colspan="10" style="color:var(--muted);padding:16px">Search and select an input shard.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /viewRecipes -->
+
+  <div class="drawer-bg" id="drawerBg" onclick="if(event.target===this)closeDrawer()">
+  <div class="drawer" role="dialog" aria-modal="true">
+    <div class="drawer-top">
+      <div>
+        <h2 id="dName">—</h2>
+        <div class="sub" id="dMeta">—</div>
+      </div>
+      <button type="button" class="close" onclick="closeDrawer()">Close ✕</button>
+    </div>
+    <div class="drawer-body">
+    <div class="recipe-best" id="dBestRecipe">
+      <div class="lbl">Best recipe (min cost tree)</div>
+      <div id="dBestRecipeText">—</div>
+    </div>
+    <label class="q" for="dQty">How many of this shard do you want?</label>
+    <input class="q" type="number" id="dQty" value="1" min="1" step="1" oninput="debounceQty()" />
+    <div class="grid">
+      <div class="card"><div class="lbl">Cost / Shard</div><div class="val" id="dCps">—</div></div>
+      <div class="card"><div class="lbl">You produce</div><div class="val" id="dProd">—</div></div>
+      <div class="card"><div class="lbl">You spend (Total Cost)</div><div class="val" id="dCost">—</div></div>
+      <div class="card"><div class="lbl">You save (Save Coins)</div><div class="val green" id="dSave">—</div></div>
+      <div class="card"><div class="lbl">After tax profit</div><div class="val" id="dProfit">—</div></div>
+      <div class="card"><div class="lbl">Save %</div><div class="val" id="dRatio">—</div></div>
+      <div class="card"><div class="lbl">Bazaar buy / shard</div><div class="val" id="dBuy">—</div></div>
+      <div class="card"><div class="lbl">Hourly instabuys</div><div class="val" id="dHourly">—</div></div>
+    </div>
+    <div class="mat-section">
+      <div class="mat-section-head">Materials to buy · inventory trips (max 2240 / trip)</div>
+      <div style="overflow:auto">
+        <table class="mat-table">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th class="num">Need</th>
+              <th class="num">Unit price</th>
+              <th class="num">Subtotal</th>
+              <th>Trips</th>
+            </tr>
+          </thead>
+          <tbody id="dMatsBody">
+            <tr><td colspan="5" style="color:var(--muted);padding:16px">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="trip-box" id="dTripSummary">Inventory cap = 2240 per trip.</div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:8px" id="dHint">
+      Best recipe + materials follow the same min-cost tree as the scanner (SkyShards-style).
+    </p>
+    <div class="actions-row">
+      <button type="button" class="btn-primary" onclick="openSkyShards(currentDetailName)">Open SkyShards</button>
+      <a class="btn-ghost" id="dBz" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">Bazaar Meta</a>
+      <button type="button" class="btn-ghost" id="dFavBtn" onclick="toggleFav(currentDetailSid); updateFavBtn();">★ Favorite</button>
+    </div>
+    </div><!-- /drawer-body -->
+  </div>
+</div>
+
+<script>
+const FUSION_URL = "https://raw.githubusercontent.com/Campionnn/SkyShards/master/public/fusion-data.json";
+const BAZAAR_URL = "https://api.hypixel.net/v2/skyblock/bazaar";
+const INF = 1e18;
+const LS_SETTINGS = "ssfs_settings_v2";
+const LS_FAV = "ssfs_favorites_v2";
+const LS_LAST = "ssfs_last_scan_v2";
+
+let fusionData = null;
+let bazaarProducts = null;
+let allRows = [];
+let lastScanMap = {};
+let favorites = new Set();
+let refreshTimer = null;
+let calcContext = null; // { shards, choices, products, instantBuy, craftPenalty }
+let currentDetailSid = null;
+let currentDetailName = "";
+
+
+function fmt(n) {
+  if (n == null || isNaN(n)) return "—";
+  const abs = Math.abs(n), sign = n < 0 ? "-" : "";
+  if (abs >= 1e9) return sign + (abs / 1e9).toFixed(2) + "B";
+  if (abs >= 1e6) return sign + (abs / 1e6).toFixed(2) + "M";
+  if (abs >= 1e3) return sign + (abs / 1e3).toFixed(1) + "K";
+  return sign + Math.round(abs);
+}
+function fmtHourly(n) {
+  if (n >= 1000) return (n / 1000).toFixed(1) + "K/h";
+  return Math.round(n) + "/h";
+}
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;");
+}
+
+function loadLocal() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_SETTINGS) || "null");
+    if (s) {
+      if (s.instant != null) document.getElementById("fInstant").value = s.instant;
+      if (s.croc != null) document.getElementById("fCroc").value = s.croc;
+      if (s.penalty != null) document.getElementById("fPenalty").value = s.penalty;
+      if (s.refreshMin != null) document.getElementById("fRefreshMin").value = s.refreshMin;
+      if (s.tax != null) document.getElementById("fTax").value = s.tax;
+      if (s.minSaved != null) document.getElementById("fMinSaved").value = s.minSaved;
+      if (s.minHourly != null) document.getElementById("fMinHourly").value = s.minHourly;
+      if (s.minRatio != null) document.getElementById("fMinRatio").value = s.minRatio;
+      if (s.maxCost != null) document.getElementById("fMaxCost").value = s.maxCost;
+      if (s.topN != null) document.getElementById("fTopN").value = s.topN;
+      if (s.show != null) document.getElementById("fShow").value = s.show;
+      if (s.sort != null) document.getElementById("fSort").value = s.sort;
+      if (s.flipOnly) document.getElementById("fFlipOnly").checked = true;
+      if (s.hideLoss) document.getElementById("fHideLoss").checked = true;
+      if (document.getElementById("fHidePumped") && s.hidePumped != null) document.getElementById("fHidePumped").checked = !!s.hidePumped;
+    }
+  } catch (e) {}
+  try {
+    const fav = JSON.parse(localStorage.getItem(LS_FAV) || "[]");
+    favorites = new Set(fav);
+  } catch (e) { favorites = new Set(); }
+  try {
+    lastScanMap = JSON.parse(localStorage.getItem(LS_LAST) || "{}") || {};
+  } catch (e) { lastScanMap = {}; }
+}
+
+function saveSettings() {
+  const s = {
+    instant: document.getElementById("fInstant").value,
+    croc: Number(document.getElementById("fCroc").value),
+    penalty: Number(document.getElementById("fPenalty").value),
+    refreshMin: Number(document.getElementById("fRefreshMin").value),
+    tax: Number(document.getElementById("fTax").value),
+    minSaved: Number(document.getElementById("fMinSaved").value),
+    minHourly: Number(document.getElementById("fMinHourly").value),
+    minRatio: Number(document.getElementById("fMinRatio").value),
+    maxCost: Number(document.getElementById("fMaxCost").value),
+    topN: Number(document.getElementById("fTopN").value),
+    show: document.getElementById("fShow").value,
+    sort: document.getElementById("fSort").value,
+    flipOnly: document.getElementById("fFlipOnly").checked,
+    hideLoss: document.getElementById("fHideLoss").checked,
+    hidePumped: document.getElementById("fHidePumped") && document.getElementById("fHidePumped").checked,
+  };
+  try { localStorage.setItem(LS_SETTINGS, JSON.stringify(s)); } catch (e) {}
+}
+
+function saveFavorites() {
+  try { localStorage.setItem(LS_FAV, JSON.stringify([...favorites])); } catch (e) {}
+}
+
+function saveLastScan() {
+  const map = {};
+  for (const r of allRows) map[r.sid] = { saved: r.saved, totalCost: r.totalCost, buy: r.buy };
+  try { localStorage.setItem(LS_LAST, JSON.stringify(map)); } catch (e) {}
+}
+
+function resetSettings() {
+  document.getElementById("fInstant").value = "instant";
+  document.getElementById("fCroc").value = 10;
+  document.getElementById("fPenalty").value = 1000;
+  document.getElementById("fRefreshMin").value = 30;
+  document.getElementById("fTax").value = 1.25;
+  document.getElementById("fMinSaved").value = 20000;
+  document.getElementById("fMinHourly").value = 100;
+  document.getElementById("fMinRatio").value = 0;
+  document.getElementById("fMaxCost").value = 0;
+  document.getElementById("fTopN").value = 0;
+  document.getElementById("fShow").value = "all";
+  document.getElementById("fSort").value = "saved";
+  document.getElementById("fTopN").value = 0;
+  document.getElementById("fFlipOnly").checked = false;
+  document.getElementById("fHideLoss").checked = false;
+  if (document.getElementById("fHidePumped")) document.getElementById("fHidePumped").checked = false;
+  saveSettings();
+  rebuildFromSettings();
+}
+
+async function fetchJSON(url) {
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(url + " → " + res.status);
+  return res.json();
+}
+
+function parseRecipes(raw, shards) {
+  const out = {};
+  for (const [outId, byQty] of Object.entries(raw || {})) {
+    const list = [];
+    for (const [qtyS, pairs] of Object.entries(byQty || {})) {
+      const oq = parseInt(qtyS, 10) || 1;
+      if (!Array.isArray(pairs)) continue;
+      for (const pair of pairs) {
+        if (Array.isArray(pair) && pair.length >= 2) {
+          const isReptile = pair.some(id => (shards[id] && (shards[id].family || "").includes("Reptile")));
+          list.push({ inputs: [pair[0], pair[1]], outputQuantity: oq, isReptile });
+        }
+      }
+    }
+    out[outId] = list;
+  }
+  return out;
+}
+
+function priceOf(products, shards, sid, instantBuy) {
+  const iid = shards[sid] && shards[sid].internal_id;
+  if (!iid || !products[iid]) return null;
+  const p = products[iid];
+  const order = instantBuy
+    ? (p.buy_summary && p.buy_summary[0])
+    : (p.sell_summary && p.sell_summary[0]);
+  if (order && Number(order.pricePerUnit) > 0) return Number(order.pricePerUnit);
+  const v = Number(p.quick_status && p.quick_status.buyPrice);
+  return v > 0 ? v : null;
+}
+
+function computeMinCosts(shards, parsedRecipes, products, instantBuy, craftPenalty, crocodileLevel) {
+  const crocodileMult = 1 + (2 * (crocodileLevel || 0)) / 100;
+  const minCost = {};
+  const choices = {};
+  for (const sid of Object.keys(shards)) {
+    const p = priceOf(products, shards, sid, instantBuy);
+    minCost[sid] = p != null ? p : INF;
+    choices[sid] = null;
+  }
+  for (let iter = 0; iter < 40; iter++) {
+    let changed = false;
+    for (const [outId, recs] of Object.entries(parsedRecipes)) {
+      if (!shards[outId]) continue;
+      let best = minCost[outId] != null ? minCost[outId] : INF;
+      let bestChoice = choices[outId];
+      for (const r of recs) {
+        const i1 = r.inputs[0], i2 = r.inputs[1];
+        if (!shards[i1] || !shards[i2]) continue;
+        const c1 = minCost[i1], c2 = minCost[i2];
+        if (c1 >= INF / 2 || c2 >= INF / 2) continue;
+        const f1 = Number(shards[i1].fuse_amount) || 5;
+        const f2 = Number(shards[i2].fuse_amount) || 5;
+        let oq = r.outputQuantity || 1;
+        if (r.isReptile) oq = oq * crocodileMult;
+        const per = (c1 * f1 + c2 * f2 + craftPenalty) / oq;
+        if (per < best - 1e-6) {
+          best = per;
+          bestChoice = { recipe: r, outQty: oq, f1, f2, i1, i2 };
+          changed = true;
+        }
+      }
+      minCost[outId] = best;
+      choices[outId] = bestChoice;
+    }
+    if (!changed) break;
+  }
+  return { minCost, choices };
+}
+
+
+const INV_CAP = 2240;
+let _renderTimer = null;
+let _qtyTimer = null;
+let _marketLoaded = false;
+
+function debounceRender() {
+  if (_renderTimer) clearTimeout(_renderTimer);
+  _renderTimer = setTimeout(() => { _renderTimer = null; render(); }, 120);
+}
+function debounceQty() {
+  if (_qtyTimer) clearTimeout(_qtyTimer);
+  _qtyTimer = setTimeout(() => { _qtyTimer = null; updateDetailQty(); }, 80);
+}
+
+
+/** Walk min-cost tree; accumulate leaf (bazaar buy) quantities. */
+function collectMaterials(sid, qty, shards, choices, products, instantBuy, stack, leaves) {
+  if (qty <= 1e-9) return;
+  if (stack.has(sid)) {
+    leaves[sid] = (leaves[sid] || 0) + qty;
+    return;
+  }
+  const choice = choices[sid];
+  if (!choice || !choice.recipe) {
+    leaves[sid] = (leaves[sid] || 0) + qty;
+    return;
+  }
+  stack.add(sid);
+  const oq = choice.outQty || 1;
+  const crafts = Math.ceil(qty / oq - 1e-12);
+  collectMaterials(choice.i1, crafts * choice.f1, shards, choices, products, instantBuy, stack, leaves);
+  collectMaterials(choice.i2, crafts * choice.f2, shards, choices, products, instantBuy, stack, leaves);
+  stack.delete(sid);
+}
+
+function splitInvTrips(need, cap) {
+  need = Math.ceil(need - 1e-9);
+  if (need <= 0) return [];
+  const trips = [];
+  let left = need;
+  while (left > 0) {
+    const take = Math.min(cap, left);
+    trips.push(take);
+    left -= take;
+  }
+  return trips;
+}
+
+function formatTrips(trips) {
+  if (!trips.length) return "—";
+  if (trips.length === 1) {
+    return "<span class='trip-pill'><em>1 trip</em>" + trips[0].toLocaleString() + "</span>";
+  }
+  const full = trips.filter(t => t >= INV_CAP).length;
+  const last = trips[trips.length - 1];
+  // Compact: "4 trips · 3×2240 + 780" instead of 4 DOM pills chains
+  if (full >= 1 && last < INV_CAP) {
+    return "<span class='trip-pill'><em>" + trips.length + " trips</em>" +
+      full + "×" + INV_CAP.toLocaleString() + " + " + last.toLocaleString() + "</span>";
+  }
+  return "<span class='trip-pill'><em>" + trips.length + " trips</em>" +
+    trips.length + "×" + trips[0].toLocaleString() + "</span>";
+}
+
+function bestRecipeLabel(sid, shards, choices) {
+  const ch = choices[sid];
+  if (!ch || !ch.recipe) return "No craft path — buy from bazaar only.";
+  const n1 = shards[ch.i1] ? (shards[ch.i1].name || ch.i1) : ch.i1;
+  const n2 = shards[ch.i2] ? (shards[ch.i2].name || ch.i2) : ch.i2;
+  const nOut = shards[sid] ? (shards[sid].name || sid) : sid;
+  return ch.f1 + "× " + n1 + " + " + ch.f2 + "× " + n2 + "  →  " +
+    Number(ch.outQty).toFixed(ch.outQty % 1 ? 2 : 0) + "× " + nOut + " / craft";
+}
+
+function treeCost(sid, qty, shards, choices, products, instantBuy, craftPenalty, memo, stack) {
+  if (qty <= 1e-9) return { totalCost: 0, produced: 0, crafts: 0 };
+  const key = sid + "|" + qty;
+  if (memo[key]) return memo[key];
+  if (stack.has(sid)) {
+    const p = priceOf(products, shards, sid, instantBuy) || 0;
+    return { totalCost: p * qty, produced: qty, crafts: 0 };
+  }
+  const choice = choices[sid];
+  if (!choice || !choice.recipe) {
+    const p = priceOf(products, shards, sid, instantBuy) || 0;
+    const res = { totalCost: p * qty, produced: qty, crafts: 0 };
+    memo[key] = res;
+    return res;
+  }
+  stack.add(sid);
+  const oq = choice.outQty || 1;
+  const crafts = Math.ceil(qty / oq - 1e-12);
+  const produced = crafts * oq;
+  let total = crafts * craftPenalty;
+  const c1 = treeCost(choice.i1, crafts * choice.f1, shards, choices, products, instantBuy, craftPenalty, memo, stack);
+  const c2 = treeCost(choice.i2, crafts * choice.f2, shards, choices, products, instantBuy, craftPenalty, memo, stack);
+  total += c1.totalCost + c2.totalCost;
+  stack.delete(sid);
+  const res = { totalCost: total, produced, crafts };
+  memo[key] = res;
+  return res;
+}
+
+function getTax() {
+  return (Number(document.getElementById("fTax").value) || 0) / 100;
+}
+
+function buildRows() {
+  const shards = fusionData.shards || {};
+  const parsed = parseRecipes(fusionData.recipes, shards);
+  const products = bazaarProducts || {};
+  const instantBuy = document.getElementById("fInstant").value === "instant";
+  const craftPenalty = Number(document.getElementById("fPenalty").value) || 0;
+  const crocodileLevel = Number(document.getElementById("fCroc").value) || 0;
+  const tax = getTax();
+  const { choices } = computeMinCosts(shards, parsed, products, instantBuy, craftPenalty, crocodileLevel);
+  calcContext = { shards, choices, products, instantBuy, craftPenalty };
+
+  const prev = lastScanMap || {};
+  const rows = [];
+  for (const [sid, sh] of Object.entries(shards)) {
+    const iid = sh.internal_id || ("SHARD_" + sid);
+    const prod = products[iid];
+    if (!prod || !prod.quick_status) continue;
+    const buy = priceOf(products, shards, sid, instantBuy) || 0;
+    const buyWeek = Number(prod.quick_status.buyMovingWeek) || 0;
+    if (buy <= 0) continue;
+
+    const memo = {};
+    const stack = new Set();
+    const tree = treeCost(sid, 1, shards, choices, products, instantBuy, craftPenalty, memo, stack);
+    const hasCraft = !!(choices[sid] && choices[sid].recipe);
+    const totalCost = tree.totalCost;
+    const produced = tree.produced > 0 ? tree.produced : 1;
+    const costPerShard = totalCost / produced;
+    const saved = produced * buy - totalCost;
+    const totalProfit = saved > 0 ? saved * (1 - tax) : saved;
+    const ratio = totalCost > 0 ? (saved / totalCost) * 100 : 0;
+    const hourly = buyWeek / 168;
+    const prevSaved = prev[sid] != null ? prev[sid].saved : null;
+    const deltaSaved = prevSaved != null ? saved - prevSaved : null;
+    const trend = estimatePriceBias(prod, buy);
+    const health = estimatePriceHealth(prod, buy);
+
+    rows.push({
+      sid, name: sh.name || sid, internal: iid,
+      rarity: (sh.rarity || "common").toLowerCase(),
+      type: sh.synthesized ? "flip" : "gather",
+      buy, costPerShard, totalCost, produced, hasCraft,
+      saved, ratio, totalProfit, hourly, deltaSaved, trend, health,
+      profitable: saved > 1,
+    });
+  }
+  allRows = rows;
+}
+
+function filteredRows() {
+  const q = (document.getElementById("fSearch").value || "").trim().toLowerCase();
+  const show = document.getElementById("fShow").value;
+  const minHourly = Number(document.getElementById("fMinHourly").value) || 0;
+  const minSaved = Number(document.getElementById("fMinSaved").value) || 0;
+  const minRatio = Number(document.getElementById("fMinRatio").value) || 0;
+  const maxCost = Number(document.getElementById("fMaxCost").value) || 0;
+  const topN = Number(document.getElementById("fTopN").value) || 0;
+  const sortBy = document.getElementById("fSort").value;
+  const flipOnly = document.getElementById("fFlipOnly").checked;
+  const hideLoss = document.getElementById("fHideLoss").checked;
+
+  let list = allRows.slice();
+  if (q) {
+    list = list.filter(r =>
+      r.name.toLowerCase().includes(q) ||
+      r.sid.toLowerCase().includes(q) ||
+      r.internal.toLowerCase().includes(q)
+    );
+  }
+  if (flipOnly) list = list.filter(r => r.type === "flip");
+  if (hideLoss) list = list.filter(r => r.profitable);
+  const hidePumped = document.getElementById("fHidePumped") && document.getElementById("fHidePumped").checked;
+  if (hidePumped) list = list.filter(r => !(r.health && r.health.key === "pumped"));
+
+  if (show === "good") {
+    // Limits apply only in "good flips" mode
+    list = list.filter(r =>
+      r.saved >= minSaved &&
+      r.hourly >= minHourly &&
+      r.ratio >= minRatio &&
+      (maxCost <= 0 || r.totalCost <= maxCost) &&
+      r.profitable
+    );
+    if (window._profilePreferFirm) {
+      list = list.filter(r => r.trend && r.trend.key === "firm");
+    }
+  } else if (show === "profit") {
+    list = list.filter(r => r.profitable && r.saved > 0);
+  } else if (show === "loss") {
+    list = list.filter(r => !r.profitable || r.saved <= 0);
+  } else if (show === "fav") {
+    list = list.filter(r => favorites.has(r.sid));
+  }
+  // show === "all": no save/hourly/budget filters — full list (search/flipOnly/hideLoss still apply)
+
+
+  const sorters = {
+    saved: (a, b) => b.saved - a.saved,
+    ratio: (a, b) => b.ratio - a.ratio,
+    profit: (a, b) => b.totalProfit - a.totalProfit,
+    hourly: (a, b) => b.hourly - a.hourly,
+    cost: (a, b) => a.totalCost - b.totalCost,
+    cps: (a, b) => a.costPerShard - b.costPerShard,
+    name: (a, b) => a.name.localeCompare(b.name),
+  };
+  list.sort(sorters[sortBy] || sorters.saved);
+  // Top N only when not viewing "all" and topN > 0
+  if (topN > 0 && show !== "all") list = list.slice(0, topN);
+  return list;
+}
+
+function toggleFav(sid) {
+  if (favorites.has(sid)) favorites.delete(sid);
+  else favorites.add(sid);
+  saveFavorites();
+  render();
+}
+
+function render() {
+  if (window._rafRender) return;
+  window._rafRender = requestAnimationFrame(() => {
+    window._rafRender = 0;
+    renderNow();
+  });
+}
+function renderNow() {
+  saveSettings();
+  const list = filteredRows();
+  const tbody = document.getElementById("tbody");
+  const show = document.getElementById("fShow").value;
+  const titles = {
+    good: "Good flips (your limits)",
+    profit: "All profitable",
+    all: "All shards",
+    loss: "Losing / zero",
+    fav: "Favorites",
+  };
+  document.getElementById("tableTitle").textContent = titles[show] || "Shards";
+  document.getElementById("resultCount").textContent = list.length + " results";
+
+  let sumProfit = 0, sumSaved = 0, sumHourly = 0, up = 0, down = 0, neu = 0;
+  for (const r of list) {
+    if (r.totalProfit > 0) sumProfit += r.totalProfit;
+    if (r.saved > 0) sumSaved += r.saved;
+    sumHourly += r.hourly;
+    if (r.deltaSaved != null) {
+      if (r.deltaSaved > 1) up++;
+      else if (r.deltaSaved < -1) down++;
+      else neu++;
+    }
+  }
+  document.getElementById("statProfit").textContent = fmt(sumProfit) + " coins";
+  document.getElementById("statSaved").textContent = fmt(sumSaved) + " coins";
+  document.getElementById("statHourly").textContent = fmt(sumHourly);
+  document.getElementById("statScanned").textContent = allRows.length + " / " + list.length;
+  document.getElementById("statDelta").textContent =
+    Object.keys(lastScanMap).length ? ("↑" + up + " ↓" + down + " ·" + neu) : "no previous scan";
+
+  if (!list.length) {
+    tbody.innerHTML = "<tr><td colspan='14' class='loading'>No shards match filters.</td></tr>";
+    return;
+  }
+
+  tbody.innerHTML = list.map(r => {
+    const sc = r.saved > 0 ? "pos" : (r.saved < 0 ? "neg" : "zero");
+    const isFav = favorites.has(r.sid);
+    let deltaHtml = "—";
+    let rowExtra = "";
+    if (r.deltaSaved != null) {
+      const d = r.deltaSaved;
+      if (d > 1) { deltaHtml = "<span class='delta-up'>+" + fmt(d) + "</span>"; rowExtra = " up"; }
+      else if (d < -1) { deltaHtml = "<span class='delta-down'>" + fmt(d) + "</span>"; rowExtra = " down"; }
+      else deltaHtml = "0";
+    } else if (Object.keys(lastScanMap).length) {
+      deltaHtml = "<span class='badge new'>NEW</span>";
+    }
+    return `<tr class="${r.profitable ? "profit" : "loss"}${isFav ? " fav" : ""}${rowExtra}">
+      <td><button type="button" class="star ${isFav ? "on" : ""}" onclick="toggleFav('${r.sid}')" title="Favorite">${isFav ? "★" : "☆"}</button></td>
+      <td style="cursor:pointer" onclick="openDetail('${r.sid}')" title="Open calculator">
+        <span class="shard-name" style="color:var(--accent)">${esc(r.name)}</span>
+        <span class="shard-id">${esc(r.internal)}</span>
+      </td>
+      <td><span class="rarity ${r.rarity}">${r.rarity}</span></td>
+      <td><span class="type-tag ${r.type}">${r.type === "flip" ? "Flip" : "Gather"}</span></td>
+      <td class="num">${r.hasCraft ? fmt(r.costPerShard) : "—"}</td>
+      <td class="num">${r.hasCraft ? fmt(r.totalCost) : "—"}</td>
+      <td class="num money ${sc}">${fmt(r.saved)}</td>
+      <td class="num">${r.hasCraft ? r.ratio.toFixed(0) + "%" : "—"}</td>
+      <td class="num">${r.hasCraft ? Number(r.produced).toFixed(2) : "—"}</td>
+      <td class="num">${fmtHourly(r.hourly)}</td>
+      <td title="${r.health ? esc(r.health.tip) : ""}"><span class="badge ${r.health ? r.health.cls : ''}">${r.health ? r.health.label : "—"}</span></td>
+      <td class="num chg">${deltaHtml}</td>
+      <td><span class="badge ${r.profitable ? "yes" : "no"}">${r.profitable ? "YES" : "NO"}</span></td>
+      <td class="actions">
+        <button type="button" class="linkish" onclick="openDetail('${r.sid}')">Calc</button>
+        <button type="button" class="linkish" onclick="openSkyShards('${esc(r.name)}')">SkyShards</button>
+        <a href="https://www.skyblock.bz/product/${r.internal}" target="_blank" rel="noopener">BZ</a>
+      </td>
+    </tr>`;
+  }).join("");
+}
+
+async function openSkyShards(name) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(name);
+    else {
+      const ta = document.createElement("textarea");
+      ta.value = name; ta.style.cssText = "position:fixed;left:-9999px";
+      document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    alert("Copied: " + name + "\n\nSkyShards will open — paste (Ctrl+V) in search.");
+  } catch (e) {
+    alert("Shard: " + name);
+  }
+  window.open("https://skyshards.com/", "_blank", "noopener");
+}
+
+function exportCSV() {
+  const list = filteredRows();
+  if (!list.length) { alert("Nothing to export."); return; }
+  const headers = ["name","id","internal","rarity","type","cost_per_shard","total_cost","save_coins","save_ratio_pct","produced","hourly_instabuys","delta_save","profitable","bazaar_buy"];
+  const lines = [headers.join(",")];
+  for (const r of list) {
+    lines.push([
+      JSON.stringify(r.name), r.sid, r.internal, r.rarity, r.type,
+      Math.round(r.costPerShard), Math.round(r.totalCost), Math.round(r.saved),
+      r.ratio.toFixed(2), r.produced.toFixed(2), r.hourly.toFixed(2),
+      r.deltaSaved != null ? Math.round(r.deltaSaved) : "",
+      r.profitable ? "YES" : "NO", Math.round(r.buy)
+    ].join(","));
+  }
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "skyshard_flips_" + new Date().toISOString().slice(0,16).replace(/[:T]/g,"-") + ".csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function onShowChange() {
+  const show = document.getElementById("fShow").value;
+  // Leaving Top-N trap: viewing full list clears top N limit
+  if (show === "all") document.getElementById("fTopN").value = 0;
+  render();
+}
+
+function showAllShards() {
+  document.getElementById("fShow").value = "all";
+  document.getElementById("fTopN").value = 0;
+  document.getElementById("fSearch").value = "";
+  document.getElementById("fFlipOnly").checked = false;
+  document.getElementById("fHideLoss").checked = false;
+  render();
+  document.querySelector(".table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function showTopN() {
+  let n = Number(document.getElementById("fTopN").value);
+  if (!n || n <= 0) n = 10;
+  document.getElementById("fTopN").value = n;
+  document.getElementById("fShow").value = "good";
+  document.getElementById("fSort").value = "saved";
+  render();
+  document.querySelector(".table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function rebuildFromSettings() {
+  saveSettings();
+  if (!fusionData || !bazaarProducts) {
+    refresh(true);
+    return;
+  }
+  buildRows();
+  render();
+  startAutoRefresh();
+  document.getElementById("statusText").textContent =
+    "Recalculated with your settings · " + allRows.length + " shards";
+}
+
+function startAutoRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  const mins = Number(document.getElementById("fRefreshMin").value) || 0;
+  if (mins > 0) {
+    refreshTimer = setInterval(() => refresh(false), mins * 60 * 1000);
+  }
+}
+
+
+
+/** Heuristic from live order book + weekly volume — NOT a guarantee. */
+
+/**
+ * Price tag from live bazaar book (not a crystal ball).
+ * Overheated = top ask far above what buyers pay / thin demand → likely to dump.
+ * Fair = normal market.
+ * Undervalued = tight book / strong buy side relative to listings.
+ */
+function estimatePriceHealth(prod, instaBuy) {
+  const qs = (prod && prod.quick_status) || {};
+  const sell = Number(qs.sellPrice) || 0; // insta-sell to buy orders
+  const buyWeek = Number(qs.buyMovingWeek) || 0;
+  const sellWeek = Number(qs.sellMovingWeek) || 0;
+  const buyOrders = Number(qs.buyOrders) || 0;
+  const sellOrders = Number(qs.sellOrders) || 0;
+
+  let sellDepth = 0, buyDepth = 0;
+  const buySum = (prod && prod.buy_summary) || [];
+  const sellSum = (prod && prod.sell_summary) || [];
+  for (let i = 0; i < Math.min(5, buySum.length); i++) sellDepth += Number(buySum[i].amount) || 0;
+  for (let i = 0; i < Math.min(5, sellSum.length); i++) buyDepth += Number(sellSum[i].amount) || 0;
+
+  const spread = (instaBuy > 0 && sell > 0) ? (instaBuy - sell) / instaBuy : 0;
+  let score = 0; // high = overheated, low = undervalued
+
+  if (spread > 0.35) score += 3;
+  else if (spread > 0.2) score += 2;
+  else if (spread > 0.12) score += 1;
+  else if (spread >= 0 && spread < 0.05) score -= 1;
+
+  if (sellDepth > buyDepth * 2.5 && sellDepth > 20) score += 2;
+  else if (buyDepth > sellDepth * 2 && buyDepth > 20) score -= 1;
+
+  if (buyWeek < 300 && spread > 0.1) score += 2;
+  if (buyWeek < 100) score += 1;
+  if (buyWeek > 2000 && spread < 0.15) score -= 1;
+
+  if (sellWeek > buyWeek * 2 && sellWeek > 400) score += 1;
+  if (sellOrders > buyOrders * 3 && sellOrders > 10) score += 1;
+
+  if (score >= 3) {
+    return {
+      key: "pumped",
+      label: "Red zone",
+      tip: "Price looks stretched vs bids / thin weekly demand — treat carefully, can dump.",
+      cls: "badge-pumped",
+    };
+  }
+  if (score <= -1) {
+    return {
+      key: "discount",
+      label: "Not bad",
+      tip: "Book looks softer / less stretched than average — relatively okay entry signal.",
+      cls: "badge-discount",
+    };
+  }
+  return {
+    key: "fair",
+    label: "Fair",
+    tip: "Looks like a normal range from spread, depth, and weekly volume.",
+    cls: "badge-fair",
+  };
+}
+
+function estimatePriceBias(prod, instaBuy) {
+  const qs = (prod && prod.quick_status) || {};
+  const sell = Number(qs.sellPrice) || 0; // insta-sell
+  const buyWeek = Number(qs.buyMovingWeek) || 0;
+  const sellWeek = Number(qs.sellMovingWeek) || 0;
+  const buyOrders = Number(qs.buyOrders) || 0;
+  const sellOrders = Number(qs.sellOrders) || 0;
+
+  // Sell-side depth near top (players listing) = pressure to fall
+  let sellDepth = 0, buyDepth = 0;
+  const buySum = prod.buy_summary || []; // you insta-buy from these (sellers)
+  const sellSum = prod.sell_summary || []; // you insta-sell into these (buyers)
+  for (let i = 0; i < Math.min(5, buySum.length); i++) sellDepth += Number(buySum[i].amount) || 0;
+  for (let i = 0; i < Math.min(5, sellSum.length); i++) buyDepth += Number(sellSum[i].amount) || 0;
+
+  let score = 0; // positive = firm/up bias, negative = soft/down bias
+  if (sellDepth > buyDepth * 1.8) score -= 2;
+  else if (buyDepth > sellDepth * 1.8) score += 2;
+  if (sellWeek > buyWeek * 1.4 && sellWeek > 500) score -= 1;
+  if (buyWeek > sellWeek * 1.4 && buyWeek > 500) score += 1;
+  if (sellOrders > buyOrders * 2) score -= 1;
+  if (buyOrders > sellOrders * 2) score += 1;
+  if (instaBuy > 0 && sell > 0) {
+    const spread = (instaBuy - sell) / instaBuy;
+    if (spread > 0.25) score -= 1; // wide spread, illiquid / top-heavy
+  }
+
+  if (score <= -2) return { key: "soft", label: "May soften", tip: "More listings / sell pressure than demand (heuristic)" };
+  if (score >= 2) return { key: "firm", label: "May hold/rise", tip: "Stronger buy-side / demand (heuristic)" };
+  return { key: "stable", label: "Unclear", tip: "No strong bias from order book + week volume" };
+}
+
+function applyProfile(name) {
+  document.getElementById("fShow").value = "good";
+  document.getElementById("fTopN").value = 0;
+  document.getElementById("fFlipOnly").checked = true;
+  document.getElementById("fHideLoss").checked = true;
+  document.getElementById("fSort").value = "saved";
+  document.getElementById("fMinRatio").value = 0;
+  document.getElementById("fMaxCost").value = 0;
+  document.getElementById("fMinSaved").value = 20000;
+  document.getElementById("fMinHourly").value = 100;
+
+  if (name === "fast") {
+    document.getElementById("fMinHourly").value = 200;
+    document.getElementById("fMinSaved").value = 15000;
+    document.getElementById("fSort").value = "hourly";
+    document.getElementById("fTopN").value = 25;
+  } else if (name === "cheap") {
+    document.getElementById("fMaxCost").value = 500000;
+    document.getElementById("fMinSaved").value = 10000;
+    document.getElementById("fMinHourly").value = 80;
+    document.getElementById("fSort").value = "cost";
+    document.getElementById("fTopN").value = 25;
+  } else if (name === "whale") {
+    document.getElementById("fMinSaved").value = 100000;
+    document.getElementById("fMinHourly").value = 30;
+    document.getElementById("fSort").value = "saved";
+    document.getElementById("fTopN").value = 20;
+  } else if (name === "safe") {
+    document.getElementById("fMinSaved").value = 25000;
+    document.getElementById("fMinHourly").value = 120;
+    document.getElementById("fMinRatio").value = 20;
+    document.getElementById("fSort").value = "ratio";
+    document.getElementById("fTopN").value = 25;
+    // filter firm in render via profile flag
+    window._profilePreferFirm = true;
+  } else {
+    // balanced best overall
+    document.getElementById("fMinSaved").value = 20000;
+    document.getElementById("fMinHourly").value = 100;
+    document.getElementById("fSort").value = "saved";
+    document.getElementById("fTopN").value = 20;
+    window._profilePreferFirm = false;
+  }
+  if (name !== "safe") window._profilePreferFirm = false;
+  render();
+  document.querySelector(".table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+
+function openDetail(sid) {
+  if (!calcContext || !allRows.length) return;
+  const r = allRows.find(x => x.sid === sid);
+  if (!r) return;
+  currentDetailSid = sid;
+  currentDetailName = r.name;
+  document.getElementById("dName").textContent = r.name;
+  document.getElementById("dMeta").textContent =
+    r.internal + " · " + r.rarity + " · " + (r.type === "flip" ? "Flip" : "Gather") +
+    " · " + (r.profitable ? "YES profit" : "NO");
+  document.getElementById("dQty").value = 1;
+  document.getElementById("dBz").href = "https://www.skyblock.bz/product/" + r.internal;
+  document.getElementById("dBuy").textContent = fmt(r.buy) + " coins";
+  document.getElementById("dHourly").textContent = fmtHourly(r.hourly);
+  updateFavBtn();
+  updateDetailQty();
+  document.getElementById("drawerBg").classList.add("open");
+}
+
+function updateFavBtn() {
+  const btn = document.getElementById("dFavBtn");
+  if (!btn || !currentDetailSid) return;
+  btn.textContent = favorites.has(currentDetailSid) ? "★ Favorited" : "☆ Favorite";
+}
+
+function updateDetailQty() {
+  if (!calcContext || !currentDetailSid) return;
+  let qty = Math.max(1, Math.floor(Number(document.getElementById("dQty").value) || 1));
+  // Hard cap so huge numbers don't freeze the tab (inventory planner still useful)
+  if (qty > 50000) qty = 50000;
+  document.getElementById("dQty").value = qty;
+  const { shards, choices, products, instantBuy, craftPenalty } = calcContext;
+  const memo = {};
+  const stack = new Set();
+  const tree = treeCost(currentDetailSid, qty, shards, choices, products, instantBuy, craftPenalty, memo, stack);
+  const buy = priceOf(products, shards, currentDetailSid, instantBuy) || 0;
+  const totalCost = tree.totalCost;
+  const produced = tree.produced > 0 ? tree.produced : qty;
+  const costPer = produced > 0 ? totalCost / produced : 0;
+  const saved = produced * buy - totalCost;
+  const tax = getTax();
+  const profit = saved > 0 ? saved * (1 - tax) : saved;
+  const ratio = totalCost > 0 ? (saved / totalCost) * 100 : 0;
+
+  document.getElementById("dCps").textContent = fmt(costPer) + " coins";
+  document.getElementById("dProd").textContent = produced.toFixed(2) + " shards";
+  document.getElementById("dCost").textContent = fmt(totalCost) + " coins";
+  const saveEl = document.getElementById("dSave");
+  saveEl.textContent = fmt(saved) + " coins";
+  saveEl.className = "val " + (saved > 0 ? "green" : (saved < 0 ? "red" : ""));
+  const profEl = document.getElementById("dProfit");
+  profEl.textContent = fmt(profit) + " coins";
+  profEl.className = "val " + (profit > 0 ? "green" : (profit < 0 ? "red" : ""));
+  document.getElementById("dRatio").textContent = ratio.toFixed(1) + "%";
+
+  // Best recipe line
+  const br = document.getElementById("dBestRecipeText");
+  if (br) br.textContent = bestRecipeLabel(currentDetailSid, shards, choices);
+
+  // Materials + inventory trips
+  const leaves = {};
+  collectMaterials(currentDetailSid, qty, shards, choices, products, instantBuy, new Set(), leaves);
+  const mats = Object.entries(leaves).map(([sid, need]) => {
+    const name = shards[sid] ? (shards[sid].name || sid) : sid;
+    const unit = priceOf(products, shards, sid, instantBuy) || 0;
+    const needC = Math.ceil(need - 1e-9);
+    const trips = splitInvTrips(needC, INV_CAP);
+    return { sid, name, need: needC, unit, sub: unit * needC, trips };
+  }).sort((a, b) => b.sub - a.sub);
+
+  const body = document.getElementById("dMatsBody");
+  if (body) {
+    if (!mats.length) {
+      body.innerHTML = "<tr><td colspan='5' style='color:var(--muted)'>No materials (or buy ready-made only).</td></tr>";
+    } else {
+      body.innerHTML = mats.map(m =>
+        "<tr>" +
+        "<td><strong>" + esc(m.name) + "</strong></td>" +
+        "<td class='num'>" + m.need.toLocaleString() + "</td>" +
+        "<td class='num'>" + fmt(m.unit) + "</td>" +
+        "<td class='num'>" + fmt(m.sub) + "</td>" +
+        "<td>" + formatTrips(m.trips) + "</td>" +
+        "</tr>"
+      ).join("");
+    }
+  }
+  const sum = document.getElementById("dTripSummary");
+  if (sum) {
+    const multi = mats.filter(m => m.trips.length > 1);
+    if (!mats.length) {
+      sum.textContent = "Inventory cap = " + INV_CAP + " per trip.";
+    } else if (!multi.length) {
+      sum.innerHTML = "All materials fit in <strong>1 trip each</strong> (cap " + INV_CAP + "). Total spend ≈ <strong>" + fmt(totalCost) + "</strong> · save ≈ <strong>" + fmt(saved) + "</strong>.";
+    } else {
+      sum.innerHTML = multi.map(m =>
+        "<div><strong>" + esc(m.name) + "</strong>: need " + m.need.toLocaleString() +
+        " → " + formatTrips(m.trips) + "</div>"
+      ).join("") +
+        "<div style='margin-top:6px'>Craft cost ≈ <strong>" + fmt(totalCost) + "</strong> · save ≈ <strong>" + fmt(saved) + "</strong> for qty " + qty + ".</div>";
+    }
+  }
+
+  document.getElementById("dHint").textContent =
+    "Want " + qty + " → tree produces " + produced.toFixed(2) +
+    " (ceil crafts). Materials are bazaar leaves of the best min-cost recipe tree.";
+}
+
+function closeDrawer() {
+  document.getElementById("drawerBg").classList.remove("open");
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeDrawer();
+});
+
+
+
+
+async function refresh(manual) {
+  const btn = document.getElementById("btnRefresh");
+  const err = document.getElementById("errorBox");
+  err.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Loading…";
+  try {
+    // snapshot previous rows as last scan before overwrite
+    if (allRows.length) {
+      lastScanMap = {};
+      for (const r of allRows) lastScanMap[r.sid] = { saved: r.saved, totalCost: r.totalCost, buy: r.buy };
+    } else {
+      try { lastScanMap = JSON.parse(localStorage.getItem(LS_LAST) || "{}") || {}; } catch (e) { lastScanMap = {}; }
+    }
+
+    if (!fusionData) fusionData = await fetchJSON(FUSION_URL);
+    const bz = await fetchJSON(BAZAAR_URL);
+    bazaarProducts = bz.products || {};
+    _marketLoaded = true;
+    buildRows();
+    render();
+    saveLastScan();
+    const t = new Date().toLocaleTimeString();
+    const mins = Number(document.getElementById("fRefreshMin").value) || 0;
+    document.getElementById("statusText").textContent =
+      "Updated " + t + (mins > 0 ? (" · Auto-refresh every " + mins + " min") : " · Auto-refresh off") +
+      " · " + allRows.length + " shards";
+    document.getElementById("liveStatus").innerHTML = "<i></i> Live · " + t;
+    startAutoRefresh();
+  } catch (e) {
+    err.style.display = "block";
+    err.textContent = "Failed: " + e.message + " — Need internet (GitHub + Hypixel API).";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Refresh";
+  }
+}
+
+
+const LS_OPS = "ssfs_ops_v1";
+
+
+/** Parse 1.5b / 500m / 250k / 1000000 → number */
+function parseCoins(str) {
+  if (str == null || str === "") return 0;
+  if (typeof str === "number") return str;
+  let s = String(str).trim().toLowerCase().replace(/,/g, "").replace(/_/g, "").replace(/\s+/g, "");
+  if (!s) return 0;
+  const m = s.match(/^(-?\d*\.?\d+)([kmb])?$/i);
+  if (!m) {
+    const n = Number(s);
+    return isFinite(n) ? n : 0;
+  }
+  let v = parseFloat(m[1]);
+  const u = (m[2] || "").toLowerCase();
+  if (u === "k") v *= 1e3;
+  else if (u === "m") v *= 1e6;
+  else if (u === "b") v *= 1e9;
+  return v;
+}
+
+function formatCoinsInput(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(n % 1e9 === 0 ? 0 : 2) + "b";
+  if (n >= 1e6) return (n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 2) + "m";
+  if (n >= 1e3) return (n / 1e3).toFixed(n % 1e3 === 0 ? 0 : 1) + "k";
+  return String(Math.round(n));
+}
+
+function switchView(which) {
+  document.getElementById("viewFlip").classList.toggle("active", which === "flip");
+  document.getElementById("viewOps").classList.toggle("active", which === "ops");
+  const vb = document.getElementById("viewBudget");
+  if (vb) vb.classList.toggle("active", which === "budget");
+  const vr = document.getElementById("viewRecipes");
+  if (vr) vr.classList.toggle("active", which === "recipes");
+  const tf = document.getElementById("tabFlip"); if (tf) tf.classList.toggle("active", which === "flip");
+  const to = document.getElementById("tabOps"); if (to) to.classList.toggle("active", which === "ops");
+  const tb = document.getElementById("tabBudget");
+  if (tb) tb.classList.toggle("active", which === "budget");
+  const tr = document.getElementById("tabRecipes");
+  if (tr) tr.classList.toggle("active", which === "recipes");
+  if (which === "ops") renderOps();
+  if (which === "recipes" && window._recipeSid) runRecipes();
+}
+
+function loadOps() {
+  let o = {};
+  try { o = JSON.parse(localStorage.getItem(LS_OPS) || "{}") || {}; } catch (e) { o = {}; }
+  if (o.nwNow != null) document.getElementById("nwNow").value = formatCoinsInput(o.nwNow);
+  if (o.nwGoal != null) document.getElementById("nwGoal").value = formatCoinsInput(o.nwGoal);
+  if (o.nwStart) document.getElementById("nwStart").value = o.nwStart;
+  if (o.nwPerDay != null) document.getElementById("nwPerDay").value = o.nwPerDay ? formatCoinsInput(o.nwPerDay) : "0";
+  if (o.banName != null) document.getElementById("banName").value = o.banName;
+  if (o.banEnd) document.getElementById("banEnd").value = o.banEnd;
+  if (o.shiftLabel != null) document.getElementById("shiftLabel").value = o.shiftLabel;
+  if (o.shiftStart != null) document.getElementById("shiftStart").value = o.shiftStart;
+  if (o.shiftEnd != null) document.getElementById("shiftEnd").value = o.shiftEnd;
+  if (o.notes != null) document.getElementById("opsNotes").value = o.notes;
+  if (!document.getElementById("logDate").value) {
+    document.getElementById("logDate").value = new Date().toISOString().slice(0, 10);
+  }
+  window._opsLog = Array.isArray(o.log) ? o.log : [];
+}
+
+function saveOps() {
+  const o = {
+    nwNow: parseCoins(document.getElementById("nwNow").value),
+    nwGoal: parseCoins(document.getElementById("nwGoal").value),
+    nwStart: document.getElementById("nwStart").value || "",
+    nwPerDay: parseCoins(document.getElementById("nwPerDay").value),
+    banName: document.getElementById("banName").value || "",
+    banEnd: document.getElementById("banEnd").value || "",
+    shiftLabel: document.getElementById("shiftLabel").value || "",
+    shiftStart: Number(document.getElementById("shiftStart").value),
+    shiftEnd: Number(document.getElementById("shiftEnd").value),
+    notes: document.getElementById("opsNotes").value || "",
+    log: window._opsLog || [],
+  };
+  try { localStorage.setItem(LS_OPS, JSON.stringify(o)); } catch (e) {}
+}
+
+function logAvgPerDay() {
+  const log = window._opsLog || [];
+  if (!log.length) return 0;
+  const sum = log.reduce((a, x) => a + (Number(x.amt) || 0), 0);
+  return sum / log.length;
+}
+
+function renderOps() {
+  const now = parseCoins(document.getElementById("nwNow").value);
+  const goal = parseCoins(document.getElementById("nwGoal").value);
+  const left = Math.max(0, goal - now);
+  document.getElementById("nwLeft").textContent = left <= 0 ? "Goal reached" : (fmt(left) + " left");
+  let perDay = parseCoins(document.getElementById("nwPerDay").value);
+  if (perDay <= 0) perDay = logAvgPerDay();
+  let days = perDay > 0 ? Math.ceil(left / perDay) : null;
+  const start = document.getElementById("nwStart").value;
+  let meta = "Avg/day used: " + (perDay > 0 ? fmt(perDay) : "set manual or add log entries");
+  if (days != null && left > 0) meta += " · ~" + days + " day(s) at that pace";
+  if (start) {
+    const startD = new Date(start + "T00:00:00");
+    const elapsed = Math.max(0, Math.floor((Date.now() - startD.getTime()) / 86400000));
+    meta += " · " + elapsed + " day(s) since account start";
+    if (days != null && left > 0 && elapsed > 0 && perDay > 0) {
+      const expected = (elapsed / (elapsed + days)) * goal;
+      // if behind: current progress slower than linear to goal
+      const pace = now / Math.max(1, elapsed);
+      const need = left / days;
+      if (pace < need * 0.85 && left > 0) {
+        document.getElementById("opsAlert").innerHTML =
+          "<div class='warn-banner'>Behind pace vs your goal: at current average you need ~" +
+          fmt(need) + " / day to finish in ~" + days + " days.</div>";
+      } else {
+        document.getElementById("opsAlert").innerHTML =
+          "<div class='ok-banner'>Pace looks OK vs the estimate (or not enough data yet).</div>";
+      }
+    } else {
+      document.getElementById("opsAlert").innerHTML = "";
+    }
+  } else {
+    document.getElementById("opsAlert").innerHTML = "";
+  }
+  document.getElementById("nwMeta").textContent = meta;
+
+  // Ban
+  const banEnd = document.getElementById("banEnd").value;
+  const banName = document.getElementById("banName").value || "Account";
+  if (banEnd) {
+    const end = new Date(banEnd);
+    const ms = end.getTime() - Date.now();
+    if (ms <= 0) {
+      document.getElementById("banLeft").textContent = "Ban timer ended";
+      document.getElementById("banLeft").className = "big green";
+      document.getElementById("banMeta").textContent = banName + " · ended " + end.toLocaleString();
+    } else {
+      const h = Math.floor(ms / 3600000);
+      const d = Math.floor(h / 24);
+      const rh = h % 24;
+      const m = Math.floor((ms % 3600000) / 60000);
+      document.getElementById("banLeft").textContent = d > 0 ? (d + "d " + rh + "h") : (rh + "h " + m + "m");
+      document.getElementById("banLeft").className = "big orange";
+      document.getElementById("banMeta").textContent = banName + " · ends " + end.toLocaleString();
+    }
+  } else {
+    document.getElementById("banLeft").textContent = "—";
+    document.getElementById("banLeft").className = "big";
+    document.getElementById("banMeta").textContent = "No ban end set";
+  }
+
+  // Shift
+  const ss = Number(document.getElementById("shiftStart").value);
+  const se = Number(document.getElementById("shiftEnd").value);
+  const hour = new Date().getHours();
+  let inShift;
+  if (ss === se) inShift = true;
+  else if (ss < se) inShift = hour >= ss && hour < se;
+  else inShift = hour >= ss || hour < se; // overnight
+  document.getElementById("shiftStatus").textContent = inShift ? "Within your noted hours" : "Outside your noted hours";
+  document.getElementById("shiftStatus").className = "big " + (inShift ? "green" : "orange");
+  document.getElementById("shiftMeta").textContent =
+    (document.getElementById("shiftLabel").value || "Shift") + " · " + ss + ":00 → " + se + ":00 (local) · reminder only, not a lock";
+
+  // Log list
+  const log = (window._opsLog || []).slice().sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  document.getElementById("logList").innerHTML = log.length
+    ? log.map(x => "<li><span>" + esc(x.date) + (x.note ? " · " + esc(x.note) : "") + "</span><span>" + fmt(x.amt) + "</span></li>").join("")
+    : "<li style='color:var(--muted)'>No entries yet</li>";
+
+}
+
+function addLogEntry() {
+  const date = document.getElementById("logDate").value || new Date().toISOString().slice(0, 10);
+  const amt = parseCoins(document.getElementById("logAmt").value);
+  const note = document.getElementById("logNote").value || "";
+  if (!window._opsLog) window._opsLog = [];
+  window._opsLog = window._opsLog.filter(x => x.date !== date);
+  window._opsLog.push({ date, amt, note });
+  saveOps();
+  renderOps();
+  document.getElementById("logAmt").value = 0;
+  document.getElementById("logNote").value = "";
+}
+
+function clearLog() {
+  if (!confirm("Clear entire daily log?")) return;
+  window._opsLog = [];
+  saveOps();
+  renderOps();
+}
+
+function clearBan() {
+  document.getElementById("banEnd").value = "";
+  document.getElementById("banName").value = "";
+  saveOps();
+  renderOps();
+}
+
+
+
+let lastBudgetPlan = [];
+
+function runBudgetPlan() {
+  if (!allRows.length || !calcContext) {
+    alert("Open Flip Scanner and press Refresh first so live prices & trees are loaded.");
+    return;
+  }
+  const budget = parseCoins(document.getElementById("bBudget").value);
+  const minSave = parseCoins(document.getElementById("bMinSave").value);
+  const minHourly = Number(document.getElementById("bMinHourly").value) || 0;
+  const maxShards = Math.max(1, Number(document.getElementById("bMaxShards").value) || 12);
+  const maxPct = Math.min(100, Math.max(5, Number(document.getElementById("bMaxPct").value) || 35)) / 100;
+  const strategy = document.getElementById("bStrategy").value;
+  const skipPumped = document.getElementById("bSkipPumped")
+    ? document.getElementById("bSkipPumped").checked
+    : true;
+  const tax = getTax();
+
+  if (budget <= 0) {
+    alert("Enter a budget (e.g. 500m or 1b).");
+    return;
+  }
+
+  const shards = calcContext.shards;
+  const products = calcContext.products;
+
+  let cands = allRows.filter(r =>
+    r.hasCraft && r.profitable && r.saved >= minSave && r.hourly >= minHourly && r.totalCost > 0
+  ).map(r => {
+    const prod = products[r.internal];
+    const health = estimatePriceHealth(prod, r.buy);
+    return Object.assign({}, r, { health });
+  });
+
+  const pumped = cands.filter(r => r.health.key === "pumped");
+  const safePool = cands.filter(r => r.health.key !== "pumped");
+  if (skipPumped) cands = safePool.slice();
+
+  const score = {
+    ratio: r => r.ratio,
+    saved: r => r.saved,
+    hourly: r => r.hourly,
+    balanced: r => r.ratio * Math.log10(10 + r.hourly) * Math.log10(10 + r.saved),
+  };
+  const sc = score[strategy] || score.saved;
+  cands.sort((a, b) => sc(b) - sc(a));
+  // Prefer Fair/Undervalued slightly when scores close
+  cands.sort((a, b) => {
+    const d = sc(b) - sc(a);
+    if (Math.abs(d) > 1e-6) return d > 0 ? 1 : -1;
+    const rank = { discount: 0, fair: 1, pumped: 2 };
+    return (rank[a.health.key] || 1) - (rank[b.health.key] || 1);
+  });
+  cands = cands.slice(0, Math.max(maxShards * 4, 40));
+
+  let remaining = budget;
+  const maxPer = budget * maxPct;
+  const plan = [];
+  const { choices, instantBuy, craftPenalty } = calcContext;
+
+  for (const r of cands) {
+    if (plan.length >= maxShards) break;
+    if (remaining < r.totalCost) continue;
+
+    const unitCost = r.totalCost;
+    const unitSave = r.saved;
+    const unitProd = r.produced;
+    if (unitCost <= 0 || unitSave <= 0) continue;
+
+    let maxByBudget = Math.floor(remaining / unitCost);
+    let maxByCap = Math.floor(maxPer / unitCost);
+    let cycles = Math.min(maxByBudget, maxByCap);
+    if (cycles < 1) continue;
+
+    const want = unitProd * cycles;
+    let tree = treeCost(r.sid, Math.max(1, Math.ceil(want - 1e-9)), shards, choices, products, instantBuy, craftPenalty, {}, new Set());
+    let spend = tree.totalCost;
+    let prod = tree.produced;
+    let save = prod * r.buy - spend;
+
+    while (cycles > 0 && spend > remaining + 1) {
+      cycles--;
+      if (cycles < 1) break;
+      const want2 = unitProd * cycles;
+      const t2 = treeCost(r.sid, Math.max(1, Math.ceil(want2 - 1e-9)), shards, choices, products, instantBuy, craftPenalty, {}, new Set());
+      spend = t2.totalCost;
+      prod = t2.produced;
+      save = prod * r.buy - spend;
+    }
+    if (cycles < 1 || spend > remaining) continue;
+    if (spend > maxPer * 1.01) {
+      while (cycles > 1 && spend > maxPer) {
+        cycles--;
+        const want2 = unitProd * cycles;
+        const t2 = treeCost(r.sid, Math.max(1, Math.ceil(want2 - 1e-9)), shards, choices, products, instantBuy, craftPenalty, {}, new Set());
+        spend = t2.totalCost;
+        prod = t2.produced;
+        save = prod * r.buy - spend;
+      }
+      if (spend > maxPer && cycles === 1 && spend > remaining) continue;
+    }
+
+    plan.push({
+      sid: r.sid,
+      name: r.name,
+      internal: r.internal,
+      cycles,
+      produced: prod,
+      spend,
+      save,
+      ratio: spend > 0 ? (save / spend) * 100 : 0,
+      hourly: r.hourly,
+      health: r.health,
+    });
+    remaining -= spend;
+  }
+
+  lastBudgetPlan = plan;
+  const spent = budget - remaining;
+  const totalSave = plan.reduce((a, x) => a + x.save, 0);
+  const totalProfit = totalSave > 0 ? totalSave * (1 - tax) : totalSave;
+
+  document.getElementById("bpBudget").textContent = fmt(budget);
+  document.getElementById("bpSpent").textContent = fmt(spent);
+  document.getElementById("bpLeft").textContent = fmt(remaining);
+  document.getElementById("bpSave").textContent = fmt(totalSave);
+  document.getElementById("bpProfit").textContent = fmt(totalProfit);
+  document.getElementById("bpRoi").textContent = spent > 0 ? ((totalSave / spent) * 100).toFixed(1) + "%" : "—";
+  document.getElementById("bpCount").textContent = plan.length + " lines";
+
+  let note = plan.length
+    ? ("Allocated " + fmt(spent) + " of " + fmt(budget) + " across " + plan.length +
+       " shard(s). Est. save " + fmt(totalSave) + ".")
+    : "No lines fit. Refresh scanner, lower filters, or allow Red zone.";
+  if (skipPumped && pumped.length) {
+    note += " Skipped " + pumped.length + " Red zone (e.g. " +
+      pumped.slice(0, 3).map(p => p.name).join(", ") + ").";
+  }
+  note += " Price tags use live order book + weekly volume — not a guarantee.";
+  document.getElementById("bpNote").textContent = note;
+
+  const body = document.getElementById("bpBody");
+  if (!plan.length) {
+    body.innerHTML = "<tr><td colspan='9' style='color:var(--muted);padding:16px'>No matching flips. Refresh data or loosen filters.</td></tr>";
+    return;
+  }
+  body.innerHTML = plan.map((x, i) =>
+    "<tr>" +
+    "<td>" + (i + 1) + "</td>" +
+    "<td><strong>" + esc(x.name) + "</strong><div style='font-size:0.65rem;color:var(--muted)'>" + esc(x.internal) + "</div></td>" +
+    "<td class='num'>" + x.cycles + "</td>" +
+    "<td class='num'>" + x.produced.toFixed(2) + "</td>" +
+    "<td class='num'>" + fmt(x.spend) + "</td>" +
+    "<td class='num' style='color:var(--green);font-weight:600'>" + fmt(x.save) + "</td>" +
+    "<td class='num'>" + x.ratio.toFixed(0) + "%</td>" +
+    "<td class='num'>" + fmtHourly(x.hourly) + "</td>" +
+    "<td title='" + esc(x.health.tip) + "'><span class='badge " + x.health.cls + "'>" + x.health.label + "</span></td>" +
+    "</tr>"
+  ).join("");
+}
+
+function exportBudgetCSV() {
+  if (!lastBudgetPlan.length) {
+    alert("Build a plan first.");
+    return;
+  }
+  const lines = ["rank,name,id,cycles,produced,spend,save,save_pct,hourly"];
+  lastBudgetPlan.forEach((x, i) => {
+    lines.push([i + 1, JSON.stringify(x.name), x.sid, x.cycles, x.produced.toFixed(2),
+      Math.round(x.spend), Math.round(x.save), x.ratio.toFixed(1), x.hourly.toFixed(1)].join(","));
+  });
+  const blob = new Blob([lines.join("\\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "stack_router_plan.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+
+
+let _recipeSid = null;
+let _recipeName = "";
+window._recipeSid = null;
+
+function sellPriceOf(products, shards, sid) {
+  const iid = shards[sid] && shards[sid].internal_id;
+  if (!iid || !products[iid]) return null;
+  const p = products[iid];
+  const order = p.sell_summary && p.sell_summary[0];
+  if (order && Number(order.pricePerUnit) > 0) return Number(order.pricePerUnit);
+  const v = Number(p.quick_status && p.quick_status.sellPrice);
+  return v > 0 ? v : null;
+}
+
+function hourlyOf(products, shards, sid) {
+  const iid = shards[sid] && shards[sid].internal_id;
+  if (!iid || !products[iid]) return 0;
+  const qs = products[iid].quick_status || {};
+  return (Number(qs.buyMovingWeek) || 0) / 168;
+}
+
+function recipeSuggest() {
+  const box = document.getElementById("rSuggest");
+  const q = (document.getElementById("rSearch").value || "").trim().toLowerCase();
+  if (!fusionData || !q || q.length < 1) {
+    box.classList.remove("open");
+    box.innerHTML = "";
+    return;
+  }
+  const shards = fusionData.shards || {};
+  const hits = [];
+  for (const [sid, sh] of Object.entries(shards)) {
+    const name = (sh.name || sid).toLowerCase();
+    const iid = (sh.internal_id || "").toLowerCase();
+    if (name.includes(q) || sid.toLowerCase().includes(q) || iid.includes(q)) {
+      hits.push({ sid, name: sh.name || sid, rarity: sh.rarity || "", family: sh.family || "" });
+    }
+    if (hits.length >= 25) break;
+  }
+  hits.sort((a, b) => {
+    const an = a.name.toLowerCase().startsWith(q) ? 0 : 1;
+    const bn = b.name.toLowerCase().startsWith(q) ? 0 : 1;
+    return an - bn || a.name.localeCompare(b.name);
+  });
+  if (!hits.length) {
+    box.innerHTML = "<div style='padding:10px;color:var(--muted);font-size:0.85rem'>No match</div>";
+    box.classList.add("open");
+    return;
+  }
+  box.innerHTML = hits.map(h =>
+    "<button type='button' onclick='selectRecipeInput(" + JSON.stringify(h.sid) + ")'>" +
+    "<div><div class='rn'>" + esc(h.name) + "</div>" +
+    "<div class='rm'>" + esc(h.family || h.rarity || h.sid) + "</div></div></button>"
+  ).join("");
+  box.classList.add("open");
+}
+
+function recipeSearchKey(e) {
+  if (e.key === "Escape") {
+    document.getElementById("rSuggest").classList.remove("open");
+  }
+  if (e.key === "Enter") {
+    const btn = document.querySelector("#rSuggest button");
+    if (btn) btn.click();
+  }
+}
+
+function selectRecipeInput(sid) {
+  if (!fusionData) return;
+  const sh = fusionData.shards[sid];
+  if (!sh) return;
+  _recipeSid = sid;
+  _recipeName = sh.name || sid;
+  window._recipeSid = sid;
+  document.getElementById("rSearch").value = _recipeName;
+  document.getElementById("rSuggest").classList.remove("open");
+  document.getElementById("rSelectedLabel").innerHTML =
+    "<strong style='color:var(--blue)'>" + esc(_recipeName) + "</strong> " +
+    "<span style='color:var(--muted)'>· " + esc(sh.internal_id || sid) + " · " + esc(sh.rarity || "") + "</span>";
+  runRecipes();
+}
+
+function clearRecipeInput() {
+  _recipeSid = null;
+  _recipeName = "";
+  window._recipeSid = null;
+  document.getElementById("rSearch").value = "";
+  document.getElementById("rSelectedLabel").innerHTML = "<span style='color:var(--muted)'>No shard selected</span>";
+  document.getElementById("rSuggest").classList.remove("open");
+  document.getElementById("rpName").textContent = "—";
+  document.getElementById("rpCount").textContent = "—";
+  document.getElementById("rpBest").textContent = "—";
+  document.getElementById("rpBestOut").textContent = "—";
+  document.getElementById("rpLines").textContent = "0";
+  document.getElementById("rpBody").innerHTML =
+    "<tr><td colspan='10' style='color:var(--muted);padding:16px'>Search and select an input shard.</td></tr>";
+}
+
+function runRecipes() {
+  if (!_recipeSid) return;
+  if (!fusionData || !bazaarProducts) {
+    alert("Open Flip Scanner and press Refresh first.");
+    return;
+  }
+  const shards = fusionData.shards || {};
+  const products = bazaarProducts;
+  const instantBuy = document.getElementById("fInstant")
+    ? document.getElementById("fInstant").value === "instant"
+    : true;
+  const craftPenalty = document.getElementById("fPenalty")
+    ? (Number(document.getElementById("fPenalty").value) || 1000)
+    : 1000;
+  const crocodileLevel = document.getElementById("fCroc")
+    ? (Number(document.getElementById("fCroc").value) || 10)
+    : 10;
+  const crocodileMult = 1 + (2 * crocodileLevel) / 100;
+  const ownMode = document.getElementById("rOwnCost").value;
+  const minProfit = parseCoins(document.getElementById("rMinProfit").value);
+  const minHourly = Number(document.getElementById("rMinHourly").value) || 0;
+  const minRatio = Number(document.getElementById("rMinRatio").value) || 0;
+  const sortBy = document.getElementById("rSort").value;
+  const topN = Number(document.getElementById("rTopN").value) || 0;
+  const skipPumped = document.getElementById("rSkipPumped")
+    ? document.getElementById("rSkipPumped").checked
+    : true;
+
+  const inPriceBuy = priceOf(products, shards, _recipeSid, true) || 0;
+  const inPriceSell = sellPriceOf(products, shards, _recipeSid) || 0;
+  let inUnitCost = 0;
+  if (ownMode === "buy") inUnitCost = inPriceBuy;
+  else if (ownMode === "sell") inUnitCost = inPriceSell;
+  // free → 0
+
+  const parsed = parseRecipes(fusionData.recipes, shards);
+  const bestByOut = new Map();
+
+  for (const [outId, recs] of Object.entries(parsed)) {
+    if (!shards[outId] || outId === _recipeSid) continue;
+    const outBuy = priceOf(products, shards, outId, instantBuy);
+    if (!outBuy || outBuy <= 0) continue;
+
+    for (const r of recs) {
+      const i1 = r.inputs[0], i2 = r.inputs[1];
+      if (i1 !== _recipeSid && i2 !== _recipeSid) continue;
+      if (!shards[i1] || !shards[i2]) continue;
+
+      // Exact fuse amounts from shard data (same as SkyShards)
+      const f1 = Number(shards[i1].fuse_amount) || 5;
+      const f2 = Number(shards[i2].fuse_amount) || 5;
+      let oq = r.outputQuantity || 1;
+      if (r.isReptile) oq = oq * crocodileMult;
+
+      const otherSid = i1 === _recipeSid ? i2 : i1;
+      const otherFuse = i1 === _recipeSid ? f2 : f1;
+      const myFuse = i1 === _recipeSid ? f1 : f2;
+      const otherPrice = priceOf(products, shards, otherSid, instantBuy);
+      if (otherPrice == null || otherPrice <= 0) continue;
+
+      const otherCost = otherPrice * otherFuse;
+      const myCostOwned = inUnitCost * myFuse;
+      const myCostFull = inPriceBuy * myFuse; // always full bazaar for reference
+      const cycleCost = otherCost + myCostOwned + craftPenalty;
+      const cycleCostFull = otherCost + myCostFull + craftPenalty; // SkyShards-style 1 craft
+      const revenue = oq * outBuy;
+      const profit = revenue - cycleCost;
+      const profitFull = revenue - cycleCostFull; // true coins saved if both from bazaar
+
+      // Never show lines that are not profitable when paying bazaar for BOTH inputs
+      // (stops free-input mode from listing fake "great" flips)
+      if (!(profitFull > 1)) continue;
+
+      const ratio = cycleCost > 0 ? (profit / cycleCost) * 100 : 0;
+      const perInput = myFuse > 0 ? profit / myFuse : profit;
+      const hourly = hourlyOf(products, shards, outId);
+
+      const row = {
+        outId,
+        outName: shards[outId].name || outId,
+        otherName: shards[otherSid].name || otherSid,
+        otherSid,
+        myFuse,
+        otherFuse,
+        oq,
+        otherCost,
+        cycleCost,
+        cycleCostFull,
+        profit,
+        profitFull,
+        ratio,
+        perInput,
+        hourly,
+        revenue,
+      };
+
+      const prev = bestByOut.get(outId);
+      // rank by full-cost profit for quality, keep best
+      if (!prev || row.profitFull > prev.profitFull) bestByOut.set(outId, row);
+    }
+  }
+
+  let list = [...bestByOut.values()].map(r => {
+    const iid = shards[r.outId] && shards[r.outId].internal_id;
+    const prod = iid ? products[iid] : null;
+    const outBuy = priceOf(products, shards, r.outId, instantBuy) || 0;
+    const health = estimatePriceHealth(prod, outBuy);
+    // Scanner row for same output (multi-step tree save) if available
+    const scan = allRows.find(x => x.sid === r.outId);
+    return Object.assign({}, r, {
+      health,
+      scanSaved: scan ? scan.saved : null,
+      scanCost: scan ? scan.totalCost : null,
+      scanProduced: scan ? scan.produced : null,
+    });
+  });
+
+  list = list.filter(r =>
+    r.profitFull >= Math.max(1, minProfit) &&
+    r.hourly >= minHourly &&
+    r.ratio >= minRatio
+  );
+  if (skipPumped) list = list.filter(r => !(r.health && r.health.key === "pumped"));
+
+  const sorters = {
+    profit: (a, b) => b.profitFull - a.profitFull,
+    ratio: (a, b) => b.ratio - a.ratio,
+    hourly: (a, b) => b.hourly - a.hourly,
+    profitPerInput: (a, b) => b.perInput - a.perInput,
+  };
+  list.sort(sorters[sortBy] || sorters.profit);
+  if (topN > 0) list = list.slice(0, topN);
+
+  document.getElementById("rpName").textContent = _recipeName;
+  document.getElementById("rpCount").textContent = String(list.length);
+  document.getElementById("rpLines").textContent = list.length + " flips";
+
+  if (!list.length) {
+    document.getElementById("rpBest").textContent = "—";
+    document.getElementById("rpBestOut").textContent = "—";
+    document.getElementById("rpBody").innerHTML =
+      "<tr><td colspan='11' style='color:var(--muted);padding:16px'>No profitable flips (full bazaar cost) for this shard.</td></tr>";
+    document.getElementById("rpHint").textContent =
+      "Only lines that still profit when ALL mats are bought on bazaar are shown. Refresh prices or lower filters.";
+    return;
+  }
+
+  const best = list[0];
+  document.getElementById("rpBest").textContent = fmt(best.profitFull) + " / craft";
+  document.getElementById("rpBestOut").textContent = best.outName;
+
+  const tops = list.slice(0, 3).map(r => r.outName + " (+" + fmt(r.profitFull) + ")");
+  document.getElementById("rpHint").textContent =
+    "Per 1 fusion craft (fuse amounts like SkyShards). Save below = output value − all bazaar mats − penalty. " +
+    "Top: " + tops.join(" · ") + ".";
+
+  document.getElementById("rpBody").innerHTML = list.map((r, i) => {
+    const h = r.health || { label: "—", cls: "", tip: "" };
+    const costPer = r.oq > 0 ? r.cycleCostFull / r.oq : 0;
+    return "<tr class='profit'>" +
+      "<td>" + (i + 1) + "</td>" +
+      "<td><span class='shard-name' style='color:var(--green)'>" + esc(r.outName) + "</span>" +
+        "<span class='shard-id'>" + r.otherFuse + "× " + esc(r.otherName) + " + " + r.myFuse + "× " + esc(_recipeName) +
+        " → " + Number(r.oq).toFixed(2) + "× out / craft</span></td>" +
+      "<td class='num'>" + r.myFuse + "</td>" +
+      "<td class='num'>" + Number(r.oq).toFixed(2) + "</td>" +
+      "<td class='num'>" + fmt(r.cycleCostFull) + "</td>" +
+      "<td class='num money pos'>" + fmt(r.profitFull) + "</td>" +
+      "<td class='num'>" + fmt(costPer) + "</td>" +
+      "<td class='num'>" + (r.cycleCostFull > 0 ? ((r.profitFull / r.cycleCostFull) * 100).toFixed(0) : "0") + "%</td>" +
+      "<td class='num'>" + fmtHourly(r.hourly) + "</td>" +
+      "<td title='" + esc(h.tip || "") + "'><span class='badge " + (h.cls || "") + "'>" + esc(h.label || "—") + "</span></td>" +
+      "<td class='actions'>" +
+        "<button type='button' class='linkish' onclick='openDetail(\"" + r.outId + "\")'>Calc</button> " +
+        "<button type='button' class='linkish' onclick='openSkyShards(\"" + esc(r.outName) + "\")'>SkyShards</button>" +
+      "</td></tr>";
+  }).join("");
+}
+
+document.addEventListener("click", (e) => {
+  const s = document.getElementById("rSuggest");
+  const inp = document.getElementById("rSearch");
+  if (s && inp && !s.contains(e.target) && e.target !== inp) s.classList.remove("open");
+});
+
+
+
+
+const LS_AUTH = "ssfs_auth_v1";
+
+function getAuth() {
+  try { return JSON.parse(localStorage.getItem(LS_AUTH) || "null"); } catch (e) { return null; }
+}
+function setAuth(u, p) {
+  try { localStorage.setItem(LS_AUTH, JSON.stringify({ user: u, pass: p })); } catch (e) {}
+}
+
+function showGate() {
+  document.body.className = "mode-gate";
+  document.getElementById("gateScreen").classList.add("show");
+  document.getElementById("homeScreen").classList.remove("show");
+}
+function showHome() {
+  const a = getAuth();
+  if (!a || !a.user) { showGate(); return; }
+  document.body.className = "mode-home";
+  document.getElementById("gateScreen").classList.remove("show");
+  document.getElementById("homeScreen").classList.add("show");
+  const h = document.getElementById("homeHello");
+  if (h) h.textContent = "مرحباً، " + a.user;
+}
+function enterApp(view) {
+  const a = getAuth();
+  if (!a || !a.user) { showGate(); return; }
+  document.body.className = "mode-app";
+  document.getElementById("gateScreen").classList.remove("show");
+  document.getElementById("homeScreen").classList.remove("show");
+  const su = document.getElementById("sideUser");
+  if (su) su.textContent = a.user;
+  switchView(view || "flip");
+  if (!_marketLoaded) {
+    _marketLoaded = true;
+    refresh(false);
+  } else {
+    render();
+  }
+}
+function doLogin() {
+  const u = (document.getElementById("authUser").value || "").trim();
+  const p = document.getElementById("authPass").value || "";
+  if (!u) { alert("اكتب اسمك"); return; }
+  const prev = getAuth();
+  if (prev && prev.user === u && prev.pass && prev.pass !== p) {
+    if (!confirm("كلمة السر مختلفة عن المحفوظة لنفس الاسم. تحديث؟")) return;
+  }
+  setAuth(u, p);
+  showHome();
+}
+function editProfile() {
+  const a = getAuth();
+  if (a) {
+    document.getElementById("authUser").value = a.user || "";
+    document.getElementById("authPass").value = a.pass || "";
+  }
+  showGate();
+}
+function toggleThemeMenuSide() {
+  const order = ["aurora", "dark", "light"];
+  let cur = "aurora";
+  try { cur = localStorage.getItem(LS_THEME) || "aurora"; } catch (e) {}
+  const i = order.indexOf(cur);
+  setTheme(order[(i + 1) % order.length]);
+}
+
+
+const LS_THEME = "ssfs_theme_v1";
+
+function resolveTheme(mode) {
+  if (mode === "light" || mode === "dark") return mode;
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+function setTheme(mode) {
+  const m = mode || "dark";
+  try { localStorage.setItem(LS_THEME, m); } catch (e) {}
+  const resolved = resolveTheme(m);
+  document.documentElement.setAttribute("data-theme", resolved);
+  const btn = document.getElementById("themeBtn");
+  if (btn) btn.textContent = resolved === "light" ? "☀" : "☾";
+  const menu = document.getElementById("themeMenu");
+  if (menu) {
+    menu.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+  }
+  const menuEl = document.getElementById("themeMenu");
+  if (menuEl) menuEl.classList.remove("open");
+}
+
+function toggleThemeMenu() {
+  const menu = document.getElementById("themeMenu");
+  if (menu) menu.classList.toggle("open");
+}
+
+document.addEventListener("click", (e) => {
+  const wrap = document.querySelector(".theme-wrap");
+  const menu = document.getElementById("themeMenu");
+  if (menu && wrap && !wrap.contains(e.target)) menu.classList.remove("open");
+});
+
+(function initTheme() {
+  let mode = "aurora";
+  try { mode = localStorage.getItem(LS_THEME) || "aurora"; } catch (e) {}
+  setTheme(mode);
+})();
+
+loadLocal();
+loadOps();
+renderOps();
+const _auth = getAuth();
+if (_auth && _auth.user) showHome();
+else showGate();
+</script>
+  </div><!-- /main-col -->
+</div><!-- /shell -->
+</body>
+</html>
